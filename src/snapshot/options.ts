@@ -24,7 +24,7 @@ export function getSnapshotHelpText(): string {
     "",
     "Snapshot options:",
     "  --url <url>                    Page URL to open",
-    "  --out <output-directory>       Directory for screenshot.png and metadata.json",
+    "  --out <output-directory>       Directory for snapshot output files",
     `  --ready-selector <selector>    Ready selector to wait for (default: ${defaultReadySelector})`,
     `  --timeout-ms <number>          Navigation and ready wait timeout (default: ${defaultSnapshotTimeoutMs})`,
     "  --headless <true|false>        Run Chromium headlessly (default: true)",

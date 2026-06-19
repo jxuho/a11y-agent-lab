@@ -4,7 +4,7 @@
 
 The core research question is how different web observation modes, such as Chrome DevTools Protocol accessibility trees, Playwright ARIA snapshots, and compact DOM serialization, affect an AI agent's success rate, step count, token usage, latency, and invalid-action rate.
 
-This repository currently contains the initial TypeScript scaffold and a deterministic local checkout fixture app. It intentionally does not implement browser automation, observers, LLM calls, action executors, evaluators, experiment runners, or report viewers yet.
+This repository currently contains the initial TypeScript scaffold, a deterministic local checkout fixture app, and the first Snapshot Lab browser capture path. It intentionally does not implement LLM calls, action executors, evaluators, experiment runners, or report viewers yet.
 
 ## Current Scope
 
@@ -13,6 +13,7 @@ This repository currently contains the initial TypeScript scaffold and a determi
 - zod-based config schema placeholders
 - Vitest setup
 - Local checkout fixture app with accessibility variants
+- Playwright snapshot command with screenshot, metadata, and CDP AX output
 
 ## Commands
 
@@ -23,7 +24,7 @@ npm run cli -- --help
 npm run fixture:checkout
 ```
 
-The `snapshot` command can open a local fixture page, wait for readiness, and write a screenshot plus basic metadata. Later observer exports are still intentionally out of scope. The `run` and `experiment` commands remain placeholders until their roadmap phases.
+The `snapshot` command can open a local fixture page, wait for readiness, and write a screenshot, basic metadata, and CDP AX output. ARIA snapshots and compact DOM serialization are still intentionally out of scope. The `run` and `experiment` commands remain placeholders until their roadmap phases.
 
 ## Checkout Fixture App
 
@@ -61,13 +62,17 @@ Variant intent:
 
 ## Snapshot Command
 
-The snapshot command is the first v0.1 browser foundation. It launches Chromium with Playwright, opens the provided URL, waits for a ready selector, creates the output directory if needed, and writes:
+The snapshot command is the first v0.1 browser foundation. It launches Chromium with Playwright, opens the provided URL, waits for a ready selector, captures the browser-computed CDP accessibility tree, creates the output directory if needed, and writes:
 
 ```text
 <out>/
   screenshot.png
   metadata.json
+  cdp-ax.json
+  cdp-ax-summary.json
 ```
+
+`cdp-ax.json` preserves the raw Chrome DevTools Protocol `Accessibility.getFullAXTree` response. `cdp-ax-summary.json` contains normalized node fields and basic CDP AX stats, including total node count, ignored node count, interactive node count, unnamed interactive count, and duplicate interactive name count.
 
 Run it against the checkout fixture:
 

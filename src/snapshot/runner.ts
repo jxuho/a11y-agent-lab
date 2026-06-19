@@ -3,6 +3,7 @@ import path from "node:path";
 
 import { chromium } from "playwright";
 
+import { observeCdpAccessibility } from "../observers/cdpAx.js";
 import type { SnapshotOptions } from "./options.js";
 
 export interface SnapshotMetadata {
@@ -22,6 +23,8 @@ export interface SnapshotMetadata {
 export interface SnapshotResult {
   screenshotPath: string;
   metadataPath: string;
+  cdpAxPath: string;
+  cdpAxSummaryPath: string;
   metadata: SnapshotMetadata;
 }
 
@@ -49,6 +52,8 @@ export async function runSnapshot(options: SnapshotOptions): Promise<SnapshotRes
 
     const screenshotPath = path.join(options.out, "screenshot.png");
     const metadataPath = path.join(options.out, "metadata.json");
+    const cdpAxPath = path.join(options.out, "cdp-ax.json");
+    const cdpAxSummaryPath = path.join(options.out, "cdp-ax-summary.json");
     const metadata = createSnapshotMetadata({
       options,
       finalUrl: page.url(),
@@ -59,15 +64,27 @@ export async function runSnapshot(options: SnapshotOptions): Promise<SnapshotRes
 
     metadata.userAgent = userAgent;
 
+    const cdpAxObservation = await observeCdpAccessibility(page, {
+      timestamp: metadata.timestamp
+    });
+
     await page.screenshot({
       path: screenshotPath,
       fullPage: true
     });
     await writeFile(metadataPath, `${JSON.stringify(metadata, null, 2)}\n`, "utf8");
+    await writeFile(cdpAxPath, `${JSON.stringify(cdpAxObservation.rawTree, null, 2)}\n`, "utf8");
+    await writeFile(
+      cdpAxSummaryPath,
+      `${JSON.stringify(cdpAxObservation.summary, null, 2)}\n`,
+      "utf8"
+    );
 
     return {
       screenshotPath,
       metadataPath,
+      cdpAxPath,
+      cdpAxSummaryPath,
       metadata
     };
   } finally {
