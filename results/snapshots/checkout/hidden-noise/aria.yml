@@ -1,0 +1,42 @@
+- banner:
+  - heading "Checkout" [level=1]
+  - paragraph: "Fixture variant: hidden-noise"
+- main:
+  - heading "Shipping details" [level=2]
+  - group "Contact and address":
+    - text: Contact and address Full name
+    - textbox "Full name":
+      - /placeholder: Jordan Lee
+    - text: Email address
+    - textbox "Email address":
+      - /placeholder: jordan@example.com
+    - text: Street address
+    - textbox "Street address":
+      - /placeholder: 120 Research Way
+    - text: City
+    - textbox "City":
+      - /placeholder: Portland
+    - text: Postal code
+    - textbox "Postal code":
+      - /placeholder: "97205"
+  - heading "Payment" [level=2]
+  - group "Card details":
+    - text: Card details Card number
+    - textbox "Card number":
+      - /placeholder: 4242 4242 4242 4242
+    - text: Expiration date
+    - textbox "Expiration date":
+      - /placeholder: 12/30
+    - text: Security code
+    - textbox "Security code":
+      - /placeholder: "123"
+  - region "Discount":
+    - heading "Discount" [level=2]
+    - text: Discount code
+    - textbox "Discount code":
+      - /placeholder: CODE
+    - button "Apply discount"
+  - checkbox "Save my details for next time"
+  - text: Save my details for next time
+  - button "Place order"
+  - button "Back to cart"

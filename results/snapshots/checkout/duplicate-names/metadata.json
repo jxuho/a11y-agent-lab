@@ -1,0 +1,17 @@
+{
+  "mode": "snapshot-metadata",
+  "url": "http://localhost:4310/checkout?variant=duplicate-names",
+  "finalUrl": "http://localhost:4310/checkout?variant=duplicate-names",
+  "title": "A11y Agent Lab - Checkout Fixture",
+  "timestamp": "2026-06-19T19:07:32.732Z",
+  "variantId": "duplicate-names",
+  "suiteId": "checkout",
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "readySelector": "body[data-ai-ready=\"true\"]",
+  "snapshotRoot": "body",
+  "timeoutMs": 15000,
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/149.0.7827.55 Safari/537.36"
+}

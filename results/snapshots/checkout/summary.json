@@ -1,0 +1,156 @@
+{
+  "suiteId": "checkout",
+  "timestamp": "2026-06-19T19:07:33.087Z",
+  "configPath": "experiments/checkout.snapshot.yaml",
+  "outDir": "results/snapshots/checkout",
+  "variantCount": 5,
+  "successfulSnapshotCount": 5,
+  "failedSnapshotCount": 0,
+  "variants": [
+    {
+      "id": "good-a11y",
+      "url": "http://localhost:4310/checkout?variant=good-a11y",
+      "outDir": "results/snapshots/checkout/good-a11y",
+      "status": "success",
+      "stats": {
+        "cdpAx": {
+          "totalNodeCount": 100,
+          "interactiveNodeCount": 13,
+          "unnamedInteractiveNodeCount": 0,
+          "duplicateInteractiveNameCount": 0
+        },
+        "aria": {
+          "charCount": 1267,
+          "lineCount": 42,
+          "nonEmptyLineCount": 42,
+          "approxTokenCount": 317
+        },
+        "dom": {
+          "elementCount": 41,
+          "serializedElementCount": 39,
+          "interactiveElementCount": 13,
+          "unnamedInteractiveElementCount": 0,
+          "hiddenElementCount": 0,
+          "charCount": 8708,
+          "approxTokenCount": 2177
+        }
+      }
+    },
+    {
+      "id": "no-label",
+      "url": "http://localhost:4310/checkout?variant=no-label",
+      "outDir": "results/snapshots/checkout/no-label",
+      "status": "success",
+      "stats": {
+        "cdpAx": {
+          "totalNodeCount": 96,
+          "interactiveNodeCount": 13,
+          "unnamedInteractiveNodeCount": 0,
+          "duplicateInteractiveNameCount": 0
+        },
+        "aria": {
+          "charCount": 1118,
+          "lineCount": 38,
+          "nonEmptyLineCount": 38,
+          "approxTokenCount": 280
+        },
+        "dom": {
+          "elementCount": 42,
+          "serializedElementCount": 40,
+          "interactiveElementCount": 13,
+          "unnamedInteractiveElementCount": 0,
+          "hiddenElementCount": 0,
+          "charCount": 8734,
+          "approxTokenCount": 2184
+        }
+      }
+    },
+    {
+      "id": "icon-only-button",
+      "url": "http://localhost:4310/checkout?variant=icon-only-button",
+      "outDir": "results/snapshots/checkout/icon-only-button",
+      "status": "success",
+      "stats": {
+        "cdpAx": {
+          "totalNodeCount": 95,
+          "interactiveNodeCount": 13,
+          "unnamedInteractiveNodeCount": 1,
+          "duplicateInteractiveNameCount": 0
+        },
+        "aria": {
+          "charCount": 1231,
+          "lineCount": 41,
+          "nonEmptyLineCount": 41,
+          "approxTokenCount": 308
+        },
+        "dom": {
+          "elementCount": 41,
+          "serializedElementCount": 38,
+          "interactiveElementCount": 13,
+          "unnamedInteractiveElementCount": 0,
+          "hiddenElementCount": 1,
+          "charCount": 8586,
+          "approxTokenCount": 2147
+        }
+      }
+    },
+    {
+      "id": "duplicate-names",
+      "url": "http://localhost:4310/checkout?variant=duplicate-names",
+      "outDir": "results/snapshots/checkout/duplicate-names",
+      "status": "success",
+      "stats": {
+        "cdpAx": {
+          "totalNodeCount": 100,
+          "interactiveNodeCount": 14,
+          "unnamedInteractiveNodeCount": 0,
+          "duplicateInteractiveNameCount": 1
+        },
+        "aria": {
+          "charCount": 1238,
+          "lineCount": 41,
+          "nonEmptyLineCount": 41,
+          "approxTokenCount": 310
+        },
+        "dom": {
+          "elementCount": 41,
+          "serializedElementCount": 39,
+          "interactiveElementCount": 14,
+          "unnamedInteractiveElementCount": 0,
+          "hiddenElementCount": 0,
+          "charCount": 8798,
+          "approxTokenCount": 2200
+        }
+      }
+    },
+    {
+      "id": "hidden-noise",
+      "url": "http://localhost:4310/checkout?variant=hidden-noise",
+      "outDir": "results/snapshots/checkout/hidden-noise",
+      "status": "success",
+      "stats": {
+        "cdpAx": {
+          "totalNodeCount": 103,
+          "interactiveNodeCount": 13,
+          "unnamedInteractiveNodeCount": 0,
+          "duplicateInteractiveNameCount": 0
+        },
+        "aria": {
+          "charCount": 1270,
+          "lineCount": 42,
+          "nonEmptyLineCount": 42,
+          "approxTokenCount": 318
+        },
+        "dom": {
+          "elementCount": 42,
+          "serializedElementCount": 39,
+          "interactiveElementCount": 13,
+          "unnamedInteractiveElementCount": 0,
+          "hiddenElementCount": 1,
+          "charCount": 8714,
+          "approxTokenCount": 2179
+        }
+      }
+    }
+  ]
+}

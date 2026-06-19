@@ -1,0 +1,1145 @@
+{
+  "mode": "cdp-ax",
+  "url": "http://localhost:4310/checkout?variant=no-label",
+  "finalUrl": "http://localhost:4310/checkout?variant=no-label",
+  "title": "A11y Agent Lab - Checkout Fixture",
+  "timestamp": "2026-06-19T19:07:32.292Z",
+  "variantId": "no-label",
+  "suiteId": "checkout",
+  "stats": {
+    "totalNodeCount": 96,
+    "ignoredNodeCount": 17,
+    "nonIgnoredNodeCount": 79,
+    "interactiveNodeCount": 13,
+    "unnamedInteractiveNodeCount": 0,
+    "duplicateInteractiveNameCount": 0
+  },
+  "nodes": [
+    {
+      "nodeId": "2",
+      "role": "RootWebArea",
+      "name": "A11y Agent Lab - Checkout Fixture",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "4"
+      ],
+      "properties": {
+        "focused": true
+      }
+    },
+    {
+      "nodeId": "4",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [
+        "3"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "3",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [
+        "10"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "10",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [
+        "11",
+        "14"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "11",
+      "role": "banner",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "12",
+        "13"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "14",
+      "role": "main",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "15"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "12",
+      "role": "heading",
+      "name": "Checkout",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "69"
+      ],
+      "properties": {
+        "level": 1
+      }
+    },
+    {
+      "nodeId": "13",
+      "role": "paragraph",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "70"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "15",
+      "role": "form",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "16",
+        "17",
+        "41",
+        "42",
+        "57",
+        "64",
+        "66"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "69",
+      "role": "StaticText",
+      "name": "Checkout",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000002"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "70",
+      "role": "StaticText",
+      "name": "Fixture variant: no-label",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000003"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "16",
+      "role": "heading",
+      "name": "Shipping details",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "71"
+      ],
+      "properties": {
+        "level": 2
+      }
+    },
+    {
+      "nodeId": "17",
+      "role": "group",
+      "name": "Contact and address",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "18",
+        "19",
+        "23",
+        "27",
+        "32"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "41",
+      "role": "heading",
+      "name": "Payment",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "77"
+      ],
+      "properties": {
+        "level": 2
+      }
+    },
+    {
+      "nodeId": "42",
+      "role": "group",
+      "name": "Card details",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "43",
+        "44",
+        "48"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "57",
+      "role": "region",
+      "name": "Discount",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "58",
+        "59",
+        "60",
+        "63"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "64",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [
+        "65",
+        "84"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "65",
+      "role": "checkbox",
+      "name": "Save my details for next time",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {
+        "checked": "false"
+      }
+    },
+    {
+      "nodeId": "84",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "66",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [
+        "67",
+        "68"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "67",
+      "role": "button",
+      "name": "Place order",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "85"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "68",
+      "role": "button",
+      "name": "Back to cart",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "86"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000002",
+      "role": "InlineTextBox",
+      "name": "Checkout",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000003",
+      "role": "InlineTextBox",
+      "name": "Fixture variant: no-label",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "71",
+      "role": "StaticText",
+      "name": "Shipping details",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000004"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "18",
+      "role": "Legend",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "72"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "19",
+      "role": "LabelText",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "73",
+        "20"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "23",
+      "role": "generic",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "24"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "27",
+      "role": "generic",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "74",
+        "29"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "32",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [
+        "33",
+        "37"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "33",
+      "role": "LabelText",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "75",
+        "34"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "37",
+      "role": "LabelText",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "76",
+        "38"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "77",
+      "role": "StaticText",
+      "name": "Payment",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000010"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "43",
+      "role": "Legend",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "78"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "44",
+      "role": "generic",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "45"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "48",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [
+        "49",
+        "53"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "49",
+      "role": "LabelText",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "79",
+        "50"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "53",
+      "role": "LabelText",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "80",
+        "54"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "58",
+      "role": "heading",
+      "name": "Discount",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "81"
+      ],
+      "properties": {
+        "level": 2
+      }
+    },
+    {
+      "nodeId": "59",
+      "role": "LabelText",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "82"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "60",
+      "role": "textbox",
+      "name": "Discount code",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "61",
+        "62"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "63",
+      "role": "button",
+      "name": "Apply discount",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "83"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "85",
+      "role": "StaticText",
+      "name": "Place order",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000018"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "86",
+      "role": "StaticText",
+      "name": "Back to cart",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000019"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000004",
+      "role": "InlineTextBox",
+      "name": "Shipping details",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "72",
+      "role": "StaticText",
+      "name": "Contact and address",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000005"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "73",
+      "role": "StaticText",
+      "name": "Full name",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000006"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "20",
+      "role": "textbox",
+      "name": "Full name",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "21",
+        "22"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "24",
+      "role": "textbox",
+      "name": "jordan@example.com",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "25",
+        "26"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "74",
+      "role": "StaticText",
+      "name": "Street address",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000007"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "29",
+      "role": "textbox",
+      "name": "120 Research Way",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "30",
+        "31"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "75",
+      "role": "StaticText",
+      "name": "City",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000008"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "34",
+      "role": "textbox",
+      "name": "City",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "35",
+        "36"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "76",
+      "role": "StaticText",
+      "name": "Postal code",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000009"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "38",
+      "role": "textbox",
+      "name": "Postal code",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "39",
+        "40"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000010",
+      "role": "InlineTextBox",
+      "name": "Payment",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "78",
+      "role": "StaticText",
+      "name": "Card details",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000011"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "45",
+      "role": "textbox",
+      "name": "4242 4242 4242 4242",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "46",
+        "47"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "79",
+      "role": "StaticText",
+      "name": "Expiration date",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000012"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "50",
+      "role": "textbox",
+      "name": "Expiration date",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "51",
+        "52"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "80",
+      "role": "StaticText",
+      "name": "Security code",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000013"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "54",
+      "role": "textbox",
+      "name": "Security code",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "55",
+        "56"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "81",
+      "role": "StaticText",
+      "name": "Discount",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000014"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "82",
+      "role": "StaticText",
+      "name": "Discount code",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000015"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "61",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "62",
+      "role": "generic",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "83",
+      "role": "StaticText",
+      "name": "Apply discount",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [
+        "-1000000016"
+      ],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000018",
+      "role": "InlineTextBox",
+      "name": "Place order",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000019",
+      "role": "InlineTextBox",
+      "name": "Back to cart",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000005",
+      "role": "InlineTextBox",
+      "name": "Contact and address",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000006",
+      "role": "InlineTextBox",
+      "name": "Full name",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "21",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "22",
+      "role": "generic",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "25",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "26",
+      "role": "generic",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000007",
+      "role": "InlineTextBox",
+      "name": "Street address",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "30",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "31",
+      "role": "generic",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000008",
+      "role": "InlineTextBox",
+      "name": "City",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "35",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "36",
+      "role": "generic",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000009",
+      "role": "InlineTextBox",
+      "name": "Postal code",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "39",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "40",
+      "role": "generic",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000011",
+      "role": "InlineTextBox",
+      "name": "Card details",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "46",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "47",
+      "role": "generic",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000012",
+      "role": "InlineTextBox",
+      "name": "Expiration date",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "51",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "52",
+      "role": "generic",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000013",
+      "role": "InlineTextBox",
+      "name": "Security code",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "55",
+      "role": "none",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": true,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "56",
+      "role": "generic",
+      "name": "",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000014",
+      "role": "InlineTextBox",
+      "name": "Discount",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000015",
+      "role": "InlineTextBox",
+      "name": "Discount code",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    },
+    {
+      "nodeId": "-1000000016",
+      "role": "InlineTextBox",
+      "name": "Apply discount",
+      "description": "",
+      "value": "",
+      "ignored": false,
+      "childIds": [],
+      "properties": {}
+    }
+  ]
+}

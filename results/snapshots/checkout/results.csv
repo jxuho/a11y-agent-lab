@@ -1,0 +1,6 @@
+suite_id,variant_id,url,status,out_dir,cdp_total_node_count,cdp_interactive_node_count,cdp_unnamed_interactive_node_count,cdp_duplicate_interactive_name_count,aria_char_count,aria_line_count,aria_approx_token_count,dom_element_count,dom_serialized_element_count,dom_interactive_element_count,dom_unnamed_interactive_element_count,dom_hidden_element_count,dom_char_count,dom_approx_token_count,error_name,error_message
+checkout,good-a11y,http://localhost:4310/checkout?variant=good-a11y,success,results/snapshots/checkout/good-a11y,100,13,0,0,1267,42,317,41,39,13,0,0,8708,2177,,
+checkout,no-label,http://localhost:4310/checkout?variant=no-label,success,results/snapshots/checkout/no-label,96,13,0,0,1118,38,280,42,40,13,0,0,8734,2184,,
+checkout,icon-only-button,http://localhost:4310/checkout?variant=icon-only-button,success,results/snapshots/checkout/icon-only-button,95,13,1,0,1231,41,308,41,38,13,0,1,8586,2147,,
+checkout,duplicate-names,http://localhost:4310/checkout?variant=duplicate-names,success,results/snapshots/checkout/duplicate-names,100,14,0,1,1238,41,310,41,39,14,0,0,8798,2200,,
+checkout,hidden-noise,http://localhost:4310/checkout?variant=hidden-noise,success,results/snapshots/checkout/hidden-noise,103,13,0,0,1270,42,318,42,39,13,0,1,8714,2179,,
