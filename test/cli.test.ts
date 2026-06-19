@@ -7,9 +7,11 @@ describe("CLI skeleton", () => {
     const helpText = getHelpText();
 
     expect(helpText).toContain("snapshot");
+    expect(helpText).toContain("snapshot-suite");
     expect(helpText).toContain("--url <url>");
     expect(helpText).toContain("--out <output-directory>");
     expect(helpText).toContain("--snapshot-root <selector>");
+    expect(helpText).toContain("--config <path>");
     expect(helpText).toContain("run");
     expect(helpText).toContain("experiment");
   });
@@ -37,6 +39,15 @@ describe("CLI skeleton", () => {
 
     await expect(runCli(["snapshot", "--help"])).resolves.toBe(0);
     expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("Snapshot options"));
+
+    logSpy.mockRestore();
+  });
+
+  it("returns success for snapshot-suite help", async () => {
+    const logSpy = vi.spyOn(console, "log").mockImplementation(() => undefined);
+
+    await expect(runCli(["snapshot-suite", "--help"])).resolves.toBe(0);
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("Snapshot suite options"));
 
     logSpy.mockRestore();
   });

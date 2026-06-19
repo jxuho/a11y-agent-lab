@@ -124,6 +124,60 @@ npm run cli -- snapshot --url "http://localhost:4310/checkout?variant=duplicate-
 npm run cli -- snapshot --url "http://localhost:4310/checkout?variant=hidden-noise" --out "results/snapshots/checkout-hidden-noise"
 ```
 
+## Snapshot Suite
+
+The snapshot suite command loads a YAML config, runs the existing snapshot pipeline once per variant, and writes suite-level comparison files.
+
+Example config:
+
+```yaml
+id: checkout
+baseUrl: "http://localhost:4310/checkout"
+readySelector: 'body[data-ai-ready="true"]'
+snapshotRoot: "body"
+variants:
+  - id: good-a11y
+    query: "?variant=good-a11y"
+  - id: no-label
+    query: "?variant=no-label"
+```
+
+Run the included checkout suite:
+
+```bash
+npm run fixture:checkout
+```
+
+In another terminal:
+
+```bash
+npm run build
+npm run cli -- snapshot-suite \
+  --config "experiments/checkout.snapshot.yaml" \
+  --out "results/snapshots"
+```
+
+Expected output:
+
+```text
+results/snapshots/checkout/
+  summary.json
+  results.csv
+  good-a11y/
+    screenshot.png
+    metadata.json
+    cdp-ax.json
+    cdp-ax-summary.json
+    aria.yml
+    aria-summary.json
+    dom-compact.json
+    dom-summary.json
+  no-label/
+    ...
+```
+
+`summary.json` records suite metadata, success and failure counts, one entry per variant, and selected stats from CDP AX, ARIA snapshot, and compact DOM summaries. `results.csv` flattens those values into one row per variant for quick comparison. If one variant fails, the suite continues and records the error in both files.
+
 ## Roadmap
 
 The project will be developed in small, reviewable phases. Each phase should produce a useful intermediate tool and should avoid implementing later-phase behavior prematurely.

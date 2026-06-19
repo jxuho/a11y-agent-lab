@@ -3,8 +3,13 @@
 import { appConfigSchema } from "./config/schema.js";
 import { getSnapshotHelpText, parseSnapshotArgs } from "./snapshot/options.js";
 import { runSnapshot } from "./snapshot/runner.js";
+import {
+  getSnapshotSuiteHelpText,
+  parseSnapshotSuiteArgs
+} from "./snapshotSuite/options.js";
+import { runSnapshotSuite } from "./snapshotSuite/runner.js";
 
-type CommandName = "snapshot" | "run" | "experiment";
+type CommandName = "snapshot" | "snapshot-suite" | "run" | "experiment";
 
 interface CliCommand {
   name: CommandName;
@@ -16,6 +21,11 @@ const commands: CliCommand[] = [
   {
     name: "snapshot",
     summary: "Collect page observations for v0.1 Snapshot Lab.",
+    version: "v0.1"
+  },
+  {
+    name: "snapshot-suite",
+    summary: "Run snapshots across variants from a YAML config.",
     version: "v0.1"
   },
   {
@@ -34,7 +44,7 @@ const commandNames = new Set<string>(commands.map((command) => command.name));
 
 export function getHelpText(): string {
   const commandList = commands
-    .map((command) => `  ${command.name.padEnd(12)} ${command.summary}`)
+    .map((command) => `  ${command.name.padEnd(16)} ${command.summary}`)
     .join("\n");
 
   return [
@@ -59,7 +69,13 @@ export function getHelpText(): string {
     "  --timeout-ms <number>          Default: 15000",
     "  --headless <true|false>        Default: true",
     "",
-    "Snapshot suites, LLM calls, action execution, evaluation, and experiment running are intentionally out of scope for this command foundation."
+    "Snapshot suite options:",
+    "  --config <path>",
+    "  --out <output-directory>",
+    "  --timeout-ms <number>          Default: 15000",
+    "  --headless <true|false>        Default: true",
+    "",
+    "LLM calls, action execution, evaluation, and agent experiment running are intentionally out of scope for this Snapshot Lab."
   ].join("\n");
 }
 
@@ -68,8 +84,8 @@ export function getVersionText(): string {
 }
 
 export function getCommandMessage(commandName: CommandName): string {
-  if (commandName === "snapshot") {
-    return "snapshot is implemented. Run `a11y-agent-lab snapshot --help` for options.";
+  if (commandName === "snapshot" || commandName === "snapshot-suite") {
+    return `${commandName} is implemented. Run \`a11y-agent-lab ${commandName} --help\` for options.`;
   }
 
   const command = commands.find((item) => item.name === commandName);
@@ -117,6 +133,23 @@ export async function runCli(argv: string[]): Promise<number> {
     console.log(`Saved compact DOM: ${result.domCompactPath}`);
     console.log(`Saved DOM summary: ${result.domSummaryPath}`);
     return 0;
+  }
+
+  if (firstArg === "snapshot-suite") {
+    if (restArgs[0] === "--help" || restArgs[0] === "-h") {
+      console.log(getSnapshotSuiteHelpText());
+      return 0;
+    }
+
+    const options = parseSnapshotSuiteArgs(restArgs);
+    const result = await runSnapshotSuite(options);
+
+    console.log(`Saved suite summary: ${result.summaryPath}`);
+    console.log(`Saved suite CSV: ${result.csvPath}`);
+    console.log(
+      `Snapshot suite complete: ${result.summary.successfulSnapshotCount} succeeded, ${result.summary.failedSnapshotCount} failed`
+    );
+    return result.summary.failedSnapshotCount > 0 ? 1 : 0;
   }
 
   if (commandNames.has(firstArg)) {

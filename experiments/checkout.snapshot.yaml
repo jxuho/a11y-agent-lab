@@ -1,0 +1,15 @@
+id: checkout
+baseUrl: "http://localhost:4310/checkout"
+readySelector: 'body[data-ai-ready="true"]'
+snapshotRoot: "body"
+variants:
+  - id: good-a11y
+    query: "?variant=good-a11y"
+  - id: no-label
+    query: "?variant=no-label"
+  - id: icon-only-button
+    query: "?variant=icon-only-button"
+  - id: duplicate-names
+    query: "?variant=duplicate-names"
+  - id: hidden-noise
+    query: "?variant=hidden-noise"
