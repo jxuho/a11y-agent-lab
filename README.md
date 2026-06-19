@@ -13,7 +13,7 @@ This repository currently contains the initial TypeScript scaffold, a determinis
 - zod-based config schema placeholders
 - Vitest setup
 - Local checkout fixture app with accessibility variants
-- Playwright snapshot command with screenshot, metadata, CDP AX output, and ARIA snapshot output
+- Playwright snapshot command with screenshot, metadata, CDP AX output, ARIA snapshot output, and compact DOM output
 
 ## Commands
 
@@ -24,7 +24,7 @@ npm run cli -- --help
 npm run fixture:checkout
 ```
 
-The `snapshot` command can open a local fixture page, wait for readiness, and write a screenshot, basic metadata, CDP AX output, and Playwright ARIA snapshot output. Compact DOM serialization is still intentionally out of scope. The `run` and `experiment` commands remain placeholders until their roadmap phases.
+The `snapshot` command can open a local fixture page, wait for readiness, and write a screenshot, basic metadata, CDP AX output, Playwright ARIA snapshot output, and compact DOM output. The `run` and `experiment` commands remain placeholders until their roadmap phases.
 
 ## Checkout Fixture App
 
@@ -62,7 +62,7 @@ Variant intent:
 
 ## Snapshot Command
 
-The snapshot command is the first v0.1 browser foundation. It launches Chromium with Playwright, opens the provided URL, waits for a ready selector, captures the browser-computed CDP accessibility tree and Playwright ARIA snapshot, creates the output directory if needed, and writes:
+The snapshot command is the first v0.1 browser foundation. It launches Chromium with Playwright, opens the provided URL, waits for a ready selector, captures the browser-computed CDP accessibility tree, Playwright ARIA snapshot, and compact live DOM, creates the output directory if needed, and writes:
 
 ```text
 <out>/
@@ -72,11 +72,15 @@ The snapshot command is the first v0.1 browser foundation. It launches Chromium 
   cdp-ax-summary.json
   aria.yml
   aria-summary.json
+  dom-compact.json
+  dom-summary.json
 ```
 
 `cdp-ax.json` preserves the raw Chrome DevTools Protocol `Accessibility.getFullAXTree` response. `cdp-ax-summary.json` contains normalized node fields and basic CDP AX stats, including total node count, ignored node count, interactive node count, unnamed interactive count, and duplicate interactive name count.
 
 `aria.yml` preserves the string returned by Playwright `locator.ariaSnapshot()`. `aria-summary.json` contains lightweight text-derived stats, including character count, line count, role-specific line counts, unnamed interactive line count, and the first 20 non-empty preview lines.
+
+`dom-compact.json` contains a compact JSON serialization of visible, useful, and actionable DOM elements from `document.body`. It assigns stable `dom-*` refs, includes fields such as labels, ARIA attributes, placeholders, safe form values, `data-test`, hrefs, and bounding boxes, and skips noisy or hidden subtrees by default. `dom-summary.json` contains lightweight stats such as element counts, serialized element count, hidden element count, interactive counts, unnamed interactive count, form-control counts, character count, approximate token count, and the first 20 serialized elements.
 
 Run it against the checkout fixture:
 

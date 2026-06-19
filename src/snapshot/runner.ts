@@ -5,6 +5,7 @@ import { chromium } from "playwright";
 
 import { observeAriaSnapshot } from "../observers/ariaSnapshot.js";
 import { observeCdpAccessibility } from "../observers/cdpAx.js";
+import { observeDomCompact } from "../observers/domCompact.js";
 import type { SnapshotOptions } from "./options.js";
 
 export interface SnapshotMetadata {
@@ -28,6 +29,8 @@ export interface SnapshotResult {
   cdpAxSummaryPath: string;
   ariaPath: string;
   ariaSummaryPath: string;
+  domCompactPath: string;
+  domSummaryPath: string;
   metadata: SnapshotMetadata;
 }
 
@@ -59,6 +62,8 @@ export async function runSnapshot(options: SnapshotOptions): Promise<SnapshotRes
     const cdpAxSummaryPath = path.join(options.out, "cdp-ax-summary.json");
     const ariaPath = path.join(options.out, "aria.yml");
     const ariaSummaryPath = path.join(options.out, "aria-summary.json");
+    const domCompactPath = path.join(options.out, "dom-compact.json");
+    const domSummaryPath = path.join(options.out, "dom-summary.json");
     const metadata = createSnapshotMetadata({
       options,
       finalUrl: page.url(),
@@ -74,6 +79,9 @@ export async function runSnapshot(options: SnapshotOptions): Promise<SnapshotRes
     });
     const ariaSnapshotObservation = await observeAriaSnapshot(page, {
       snapshotRoot: options.snapshotRoot,
+      timestamp: metadata.timestamp
+    });
+    const domCompactObservation = await observeDomCompact(page, {
       timestamp: metadata.timestamp
     });
 
@@ -94,6 +102,16 @@ export async function runSnapshot(options: SnapshotOptions): Promise<SnapshotRes
       `${JSON.stringify(ariaSnapshotObservation.summary, null, 2)}\n`,
       "utf8"
     );
+    await writeFile(
+      domCompactPath,
+      `${JSON.stringify(domCompactObservation.observation, null, 2)}\n`,
+      "utf8"
+    );
+    await writeFile(
+      domSummaryPath,
+      `${JSON.stringify(domCompactObservation.summary, null, 2)}\n`,
+      "utf8"
+    );
 
     return {
       screenshotPath,
@@ -102,6 +120,8 @@ export async function runSnapshot(options: SnapshotOptions): Promise<SnapshotRes
       cdpAxSummaryPath,
       ariaPath,
       ariaSummaryPath,
+      domCompactPath,
+      domSummaryPath,
       metadata
     };
   } finally {

@@ -59,7 +59,7 @@ export function getHelpText(): string {
     "  --timeout-ms <number>          Default: 15000",
     "  --headless <true|false>        Default: true",
     "",
-    "Compact DOM serialization, LLM calls, action execution, evaluation, and experiment running are intentionally out of scope for this command foundation."
+    "Snapshot suites, LLM calls, action execution, evaluation, and experiment running are intentionally out of scope for this command foundation."
   ].join("\n");
 }
 
@@ -114,6 +114,8 @@ export async function runCli(argv: string[]): Promise<number> {
     console.log(`Saved CDP AX summary: ${result.cdpAxSummaryPath}`);
     console.log(`Saved ARIA snapshot: ${result.ariaPath}`);
     console.log(`Saved ARIA summary: ${result.ariaSummaryPath}`);
+    console.log(`Saved compact DOM: ${result.domCompactPath}`);
+    console.log(`Saved DOM summary: ${result.domSummaryPath}`);
     return 0;
   }
 
