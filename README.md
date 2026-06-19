@@ -4,7 +4,7 @@
 
 The core research question is how different web observation modes, such as Chrome DevTools Protocol accessibility trees, Playwright ARIA snapshots, and compact DOM serialization, affect an AI agent's success rate, step count, token usage, latency, and invalid-action rate.
 
-This repository currently contains v0.1 Snapshot Lab: a deterministic checkout fixture app, single-page snapshots, CDP AX output, Playwright ARIA snapshots, compact DOM serialization, and a snapshot suite runner. It intentionally does not implement LLM calls, action executors, evaluators, agent experiment runners, or report viewers yet.
+This repository currently contains v0.1 Snapshot Lab: a deterministic checkout fixture app, single-page snapshots, CDP AX output, Playwright ARIA snapshots, compact DOM serialization, and a snapshot suite runner. v0.2 foundation work has started with a constrained action schema and ref-based action executor. It intentionally does not implement LLM calls, a full agent loop, evaluators, agent experiment runners, or report viewers yet.
 
 ## Current Scope
 
@@ -16,6 +16,7 @@ This repository currently contains v0.1 Snapshot Lab: a deterministic checkout f
 - Local checkout fixture app with accessibility variants
 - Playwright snapshot command with screenshot, metadata, CDP AX output, ARIA snapshot output, and compact DOM output
 - YAML-based `snapshot-suite` command with suite `summary.json` and `results.csv`
+- v0.2 action schema foundation with zod validation and ref-based execution targets
 
 ## Commands
 
@@ -188,6 +189,23 @@ Quick inspection examples:
 node -e "const s=require('./results/snapshots/checkout/summary.json'); console.log(s.successfulSnapshotCount, s.failedSnapshotCount)"
 sed -n '1,6p' results/snapshots/checkout/results.csv
 ```
+
+## v0.2 Action Foundation
+
+The first v0.2 module defines a constrained JSON action schema and a ref-based executor. Agents are allowed to request only these action shapes:
+
+```ts
+type AgentAction =
+  | { type: "click"; ref: string }
+  | { type: "type"; ref: string; text: string; clear?: boolean }
+  | { type: "select"; ref: string; value: string }
+  | { type: "press"; key: string }
+  | { type: "scroll"; direction: "up" | "down"; amount?: number }
+  | { type: "wait"; ms: number }
+  | { type: "finish"; answer?: string };
+```
+
+The executor consumes validated actions plus a `RefRegistry`. DOM compact observations can be converted into a registry using their stable `dom-*` refs and internal `selectorHint` values. Raw selectors are not part of the action schema, and arbitrary Playwright code or JavaScript execution is not accepted.
 
 ## Roadmap
 
