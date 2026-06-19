@@ -7,6 +7,8 @@ describe("CLI skeleton", () => {
     const helpText = getHelpText();
 
     expect(helpText).toContain("snapshot");
+    expect(helpText).toContain("--url <url>");
+    expect(helpText).toContain("--out <output-directory>");
     expect(helpText).toContain("run");
     expect(helpText).toContain("experiment");
   });
@@ -16,16 +18,24 @@ describe("CLI skeleton", () => {
   });
 
   it("returns a clear placeholder message for command skeletons", () => {
-    expect(getCommandMessage("snapshot")).toContain("v0.1 command skeleton");
     expect(getCommandMessage("run")).toContain("intentionally out of scope");
     expect(getCommandMessage("experiment")).toContain("intentionally out of scope");
   });
 
-  it("returns success for help", () => {
+  it("returns success for help", async () => {
     const logSpy = vi.spyOn(console, "log").mockImplementation(() => undefined);
 
-    expect(runCli(["--help"])).toBe(0);
+    await expect(runCli(["--help"])).resolves.toBe(0);
     expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("A11y Agent Lab"));
+
+    logSpy.mockRestore();
+  });
+
+  it("returns success for snapshot help", async () => {
+    const logSpy = vi.spyOn(console, "log").mockImplementation(() => undefined);
+
+    await expect(runCli(["snapshot", "--help"])).resolves.toBe(0);
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("Snapshot options"));
 
     logSpy.mockRestore();
   });

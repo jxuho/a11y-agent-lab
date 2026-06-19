@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import { appConfigSchema } from "./config/schema.js";
+import { getSnapshotHelpText, parseSnapshotArgs } from "./snapshot/options.js";
+import { runSnapshot } from "./snapshot/runner.js";
 
 type CommandName = "snapshot" | "run" | "experiment";
 
@@ -49,7 +51,14 @@ export function getHelpText(): string {
     "  -h, --help     Show this help message",
     "  -v, --version  Show package version",
     "",
-    "Early scaffold commands intentionally stop before browser automation, observers, LLM calls, action execution, evaluation, or experiment running."
+    "Snapshot options:",
+    "  --url <url>",
+    "  --out <output-directory>",
+    '  --ready-selector <selector>    Default: body[data-ai-ready="true"]',
+    "  --timeout-ms <number>          Default: 15000",
+    "  --headless <true|false>        Default: true",
+    "",
+    "Observer exports, LLM calls, action execution, evaluation, and experiment running are intentionally out of scope for this command foundation."
   ].join("\n");
 }
 
@@ -58,6 +67,10 @@ export function getVersionText(): string {
 }
 
 export function getCommandMessage(commandName: CommandName): string {
+  if (commandName === "snapshot") {
+    return "snapshot is implemented. Run `a11y-agent-lab snapshot --help` for options.";
+  }
+
   const command = commands.find((item) => item.name === commandName);
 
   if (!command) {
@@ -70,10 +83,10 @@ export function getCommandMessage(commandName: CommandName): string {
   ].join("\n");
 }
 
-export function runCli(argv: string[]): number {
+export async function runCli(argv: string[]): Promise<number> {
   appConfigSchema.parse({});
 
-  const [firstArg] = argv;
+  const [firstArg, ...restArgs] = argv;
 
   if (!firstArg || firstArg === "--help" || firstArg === "-h") {
     console.log(getHelpText());
@@ -82,6 +95,20 @@ export function runCli(argv: string[]): number {
 
   if (firstArg === "--version" || firstArg === "-v") {
     console.log(getVersionText());
+    return 0;
+  }
+
+  if (firstArg === "snapshot") {
+    if (restArgs[0] === "--help" || restArgs[0] === "-h") {
+      console.log(getSnapshotHelpText());
+      return 0;
+    }
+
+    const { options } = parseSnapshotArgs(restArgs);
+    const result = await runSnapshot(options);
+
+    console.log(`Saved screenshot: ${result.screenshotPath}`);
+    console.log(`Saved metadata: ${result.metadataPath}`);
     return 0;
   }
 
@@ -97,5 +124,14 @@ export function runCli(argv: string[]): number {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  process.exitCode = runCli(process.argv.slice(2));
+  runCli(process.argv.slice(2))
+    .then((exitCode) => {
+      process.exitCode = exitCode;
+    })
+    .catch((error: unknown) => {
+      const message = error instanceof Error ? error.message : String(error);
+
+      console.error(message);
+      process.exitCode = 1;
+    });
 }

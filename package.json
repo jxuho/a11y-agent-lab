@@ -18,6 +18,7 @@
     "fixture:checkout": "tsx src/fixtures/server.ts"
   },
   "dependencies": {
+    "playwright": "^1.61.0",
     "zod": "^3.25.67"
   },
   "devDependencies": {

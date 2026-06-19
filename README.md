@@ -23,7 +23,7 @@ npm run cli -- --help
 npm run fixture:checkout
 ```
 
-The command skeletons are present so the project shape is clear, but they fail with explicit placeholder messages until their roadmap phase is implemented.
+The `snapshot` command can open a local fixture page, wait for readiness, and write a screenshot plus basic metadata. Later observer exports are still intentionally out of scope. The `run` and `experiment` commands remain placeholders until their roadmap phases.
 
 ## Checkout Fixture App
 
@@ -58,6 +58,48 @@ Variant intent:
 - `icon-only-button`: includes an icon-only discount button without a useful accessible name.
 - `duplicate-names`: includes multiple interactive controls with the same accessible name.
 - `hidden-noise`: includes hidden legacy DOM content that does not affect the visual UI but can affect future DOM serialization experiments.
+
+## Snapshot Command
+
+The snapshot command is the first v0.1 browser foundation. It launches Chromium with Playwright, opens the provided URL, waits for a ready selector, creates the output directory if needed, and writes:
+
+```text
+<out>/
+  screenshot.png
+  metadata.json
+```
+
+Run it against the checkout fixture:
+
+```bash
+npm run fixture:checkout
+```
+
+In another terminal:
+
+```bash
+npm run build
+npm run cli -- snapshot \
+  --url "http://localhost:4310/checkout?variant=good-a11y" \
+  --out "results/snapshots/checkout-good"
+```
+
+Options:
+
+- `--url <url>`: page URL to open.
+- `--out <output-directory>`: where `screenshot.png` and `metadata.json` are written.
+- `--ready-selector <selector>`: selector to wait for before capturing. Defaults to `body[data-ai-ready="true"]`.
+- `--timeout-ms <number>`: navigation and ready wait timeout. Defaults to `15000`.
+- `--headless <true|false>`: run Chromium headlessly. Defaults to `true`.
+
+Example variant snapshots:
+
+```bash
+npm run cli -- snapshot --url "http://localhost:4310/checkout?variant=no-label" --out "results/snapshots/checkout-no-label"
+npm run cli -- snapshot --url "http://localhost:4310/checkout?variant=icon-only-button" --out "results/snapshots/checkout-icon-only-button"
+npm run cli -- snapshot --url "http://localhost:4310/checkout?variant=duplicate-names" --out "results/snapshots/checkout-duplicate-names"
+npm run cli -- snapshot --url "http://localhost:4310/checkout?variant=hidden-noise" --out "results/snapshots/checkout-hidden-noise"
+```
 
 ## Roadmap
 
