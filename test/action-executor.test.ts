@@ -83,6 +83,32 @@ describe("action executor", () => {
       errorMessage: "Element detached"
     });
   });
+
+  it("returns structured failures for stale fill and select targets", async () => {
+    const page = createMockPage();
+    const target = createTarget("dom-1");
+    const registry = createRegistry(target);
+
+    vi.mocked(target.fill).mockRejectedValueOnce(new Error("Target closed"));
+    vi.mocked(target.select).mockRejectedValueOnce(new Error("Element is not a select"));
+
+    await expect(
+      executeAction(page, { type: "type", ref: "dom-1", text: "test@example.com" }, registry)
+    ).resolves.toMatchObject({
+      ok: false,
+      actionType: "type",
+      ref: "dom-1",
+      errorMessage: "Target closed"
+    });
+    await expect(
+      executeAction(page, { type: "select", ref: "dom-1", value: "express" }, registry)
+    ).resolves.toMatchObject({
+      ok: false,
+      actionType: "select",
+      ref: "dom-1",
+      errorMessage: "Element is not a select"
+    });
+  });
 });
 
 function createMockPage(): Page {

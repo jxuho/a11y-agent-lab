@@ -195,6 +195,13 @@ export async function runCli(argv: string[]): Promise<number> {
     console.log(`Saved trace: ${result.tracePath}`);
     console.log(`Saved final result: ${result.finalPath}`);
     console.log(`Agent run complete: ${result.final.status}`);
+
+    if (!result.final.success) {
+      if (result.final.errorName) {
+        console.error(`${result.final.errorName}: ${result.final.errorMessage ?? ""}`.trim());
+      }
+    }
+
     return result.final.success ? 0 : 1;
   }
 

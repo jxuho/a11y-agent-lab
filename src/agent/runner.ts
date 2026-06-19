@@ -80,6 +80,10 @@ export interface AgentStepTrace {
     errorName?: string;
     errorMessage?: string;
   };
+  error?: {
+    errorName: string;
+    errorMessage: string;
+  };
   parse?: {
     ok: boolean;
     action?: unknown;
@@ -194,6 +198,7 @@ export async function runAgentTask(input: RunAgentTaskInput): Promise<AgentRunRe
         });
       }
     } catch (error: unknown) {
+      const serializedError = serializeError(error);
       final = createFinalResult(input, {
         runId,
         observer,
@@ -203,7 +208,7 @@ export async function runAgentTask(input: RunAgentTaskInput): Promise<AgentRunRe
         totals,
         startedAt: runStartedAt,
         page,
-        error: serializeError(error)
+        error: serializedError
       });
       await appendTrace(tracePath, {
         runId,
@@ -213,8 +218,37 @@ export async function runAgentTask(input: RunAgentTaskInput): Promise<AgentRunRe
         url: page.url(),
         model: {
           adapterName: input.modelAdapter.name,
-          ...serializeError(error)
+          ...serializedError
         },
+        error: serializedError,
+        timingMs: {
+          total: Date.now() - runStartedAt
+        },
+        stopReason: "observer_error"
+      });
+    }
+
+    if (!final && observer !== "dom-compact") {
+      const error = createNonExecutableObserverError(observer);
+
+      final = createFinalResult(input, {
+        runId,
+        observer,
+        maxSteps,
+        steps: 0,
+        status: "observer_error",
+        totals,
+        startedAt: runStartedAt,
+        page,
+        error
+      });
+      await appendTrace(tracePath, {
+        runId,
+        taskId: input.task.id,
+        step: 0,
+        observer,
+        url: page.url(),
+        error,
         timingMs: {
           total: Date.now() - runStartedAt
         },
@@ -250,6 +284,7 @@ export async function runAgentTask(input: RunAgentTaskInput): Promise<AgentRunRe
           ...(observation.stats ? { stats: observation.stats } : {})
         };
       } catch (error: unknown) {
+        const serializedError = serializeError(error);
         final = createFinalResult(input, {
           runId,
           observer,
@@ -259,13 +294,14 @@ export async function runAgentTask(input: RunAgentTaskInput): Promise<AgentRunRe
           totals,
           startedAt: runStartedAt,
           page,
-          error: serializeError(error)
+          error: serializedError
         });
         trace.stopReason = "observer_error";
         trace.model = {
           adapterName: input.modelAdapter.name,
-          ...serializeError(error)
+          ...serializedError
         };
+        trace.error = serializedError;
         trace.timingMs.total = Date.now() - stepStartedAt;
         await appendTrace(tracePath, trace);
         break;
@@ -305,6 +341,7 @@ export async function runAgentTask(input: RunAgentTaskInput): Promise<AgentRunRe
           usage: modelResponse.usage
         };
       } catch (error: unknown) {
+        const serializedError = serializeError(error);
         totals.modelErrors += 1;
         final = createFinalResult(input, {
           runId,
@@ -315,12 +352,13 @@ export async function runAgentTask(input: RunAgentTaskInput): Promise<AgentRunRe
           totals,
           startedAt: runStartedAt,
           page,
-          error: serializeError(error)
+          error: serializedError
         });
         trace.model = {
           adapterName: input.modelAdapter.name,
-          ...serializeError(error)
+          ...serializedError
         };
+        trace.error = serializedError;
         trace.stopReason = "model_error";
         trace.timingMs.total = Date.now() - stepStartedAt;
         await appendTrace(tracePath, trace);
@@ -336,6 +374,10 @@ export async function runAgentTask(input: RunAgentTaskInput): Promise<AgentRunRe
         totals.invalidActions += 1;
         trace.parse = {
           ok: false,
+          errorName: parsedAction.errorName,
+          errorMessage: parsedAction.errorMessage
+        };
+        trace.error = {
           errorName: parsedAction.errorName,
           errorMessage: parsedAction.errorMessage
         };
@@ -370,6 +412,10 @@ export async function runAgentTask(input: RunAgentTaskInput): Promise<AgentRunRe
       trace.actionResult = actionResult;
 
       if (!actionResult.ok) {
+        const actionError = {
+          errorName: actionResult.errorName ?? "ActionError",
+          errorMessage: actionResult.errorMessage ?? "Action execution failed"
+        };
         totals.failedActions += 1;
         final = createFinalResult(input, {
           runId,
@@ -380,11 +426,9 @@ export async function runAgentTask(input: RunAgentTaskInput): Promise<AgentRunRe
           totals,
           startedAt: runStartedAt,
           page,
-          error: {
-            errorName: actionResult.errorName ?? "ActionError",
-            errorMessage: actionResult.errorMessage ?? "Action execution failed"
-          }
+          error: actionError
         });
+        trace.error = actionError;
         trace.stopReason = "action_error";
         trace.timingMs.total = Date.now() - stepStartedAt;
         await appendTrace(tracePath, trace);
@@ -402,6 +446,7 @@ export async function runAgentTask(input: RunAgentTaskInput): Promise<AgentRunRe
         });
         trace.timingMs.evaluate = Date.now() - evaluateStartedAt;
       } catch (error: unknown) {
+        const serializedError = serializeError(error);
         final = createFinalResult(input, {
           runId,
           observer,
@@ -411,8 +456,9 @@ export async function runAgentTask(input: RunAgentTaskInput): Promise<AgentRunRe
           totals,
           startedAt: runStartedAt,
           page,
-          error: serializeError(error)
+          error: serializedError
         });
+        trace.error = serializedError;
         trace.stopReason = "evaluation_error";
         trace.timingMs.total = Date.now() - stepStartedAt;
         await appendTrace(tracePath, trace);
@@ -597,6 +643,16 @@ function createRunId(): string {
   return `run-${new Date().toISOString().replace(/[:.]/g, "-")}`;
 }
 
+function createNonExecutableObserverError(observer: ObserverMode): {
+  errorName: string;
+  errorMessage: string;
+} {
+  return {
+    errorName: "NonExecutableObserverError",
+    errorMessage: `Observer "${observer}" cannot currently provide executable refs for the v0.2 run command. Use "dom-compact" for executable agent runs.`
+  };
+}
+
 async function appendTrace(tracePath: string, trace: AgentStepTrace): Promise<void> {
   await appendFile(tracePath, `${JSON.stringify(trace)}\n`, "utf8");
 }
@@ -636,6 +692,8 @@ function createFinalResult(
     };
   }
 ): AgentRunFinalResult {
+  const error = details.error ?? createDefaultStatusError(details.status);
+
   return {
     runId: details.runId,
     taskId: input.task.id,
@@ -654,7 +712,37 @@ function createFinalResult(
       parseErrors: details.totals.parseErrors,
       modelErrors: details.totals.modelErrors
     },
-    ...details.error
+    ...error
+  };
+}
+
+function createDefaultStatusError(status: AgentRunStatus):
+  | {
+      errorName: string;
+      errorMessage: string;
+    }
+  | undefined {
+  if (status === "success") {
+    return undefined;
+  }
+
+  if (status === "finished_without_success") {
+    return {
+      errorName: "FinishedWithoutSuccess",
+      errorMessage: "The model emitted finish, but evaluator assertions did not pass."
+    };
+  }
+
+  if (status === "max_steps_exceeded") {
+    return {
+      errorName: "MaxStepsExceeded",
+      errorMessage: "The run reached maxSteps before evaluator assertions passed."
+    };
+  }
+
+  return {
+    errorName: "AgentRunError",
+    errorMessage: `Agent run stopped with status ${status}.`
   };
 }
 

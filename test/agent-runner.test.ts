@@ -47,6 +47,7 @@ describe("agent run engine", () => {
     });
     await expect(readFile(result.tracePath, "utf8")).resolves.toContain('"stopReason":"success"');
     await expect(readFile(result.finalPath, "utf8")).resolves.toContain('"status": "success"');
+    await expect(readJsonl(result.tracePath)).resolves.toHaveLength(1);
   });
 
   it("treats finish without evaluator success as finished_without_success", async () => {
@@ -73,6 +74,7 @@ describe("agent run engine", () => {
 
     expect(result.final.status).toBe("finished_without_success");
     expect(result.final.success).toBe(false);
+    expect(result.final.errorName).toBe("FinishedWithoutSuccess");
   });
 
   it("enforces maxSteps", async () => {
@@ -110,6 +112,7 @@ describe("agent run engine", () => {
 
     expect(result.final.status).toBe("max_steps_exceeded");
     expect(result.final.steps).toBe(2);
+    expect(result.final.errorName).toBe("MaxStepsExceeded");
   });
 
   it("stops with parse_error and logs the parse failure", async () => {
@@ -135,6 +138,10 @@ describe("agent run engine", () => {
       ok: false,
       errorName: "JsonObjectModelResponseError"
     });
+    expect(trace[0].error).toMatchObject({
+      errorName: "JsonObjectModelResponseError"
+    });
+    expect(result.final.errorMessage).toContain("single JSON object");
   });
 
   it("stops with action_error when action execution fails", async () => {
@@ -168,6 +175,115 @@ describe("agent run engine", () => {
     expect(trace[0].actionResult).toMatchObject({
       ok: false,
       errorName: "RefNotFoundError"
+    });
+    expect(result.final.errorName).toBe("RefNotFoundError");
+  });
+
+  it("stops with observer_error for non-executable observer modes", async () => {
+    const result = await runAgentTask({
+      task: createTask({ observer: "aria-snapshot" }),
+      out: await createOutputDir(),
+      runId: "run-test-non-executable-observer",
+      modelAdapter: new MockModelAdapter({
+        responses: ['{ "type": "finish", "answer": "done" }']
+      }),
+      dependencies: {
+        page: createPage(),
+        observe: createObserver(),
+        executeAction: createExecutor([]),
+        evaluator: createEvaluator([])
+      }
+    });
+    const trace = await readJsonl(result.tracePath);
+
+    expect(result.final.status).toBe("observer_error");
+    expect(result.final.errorName).toBe("NonExecutableObserverError");
+    expect(result.final.errorMessage).toContain("cannot currently provide executable refs");
+    expect(trace[0]).toMatchObject({
+      step: 0,
+      stopReason: "observer_error",
+      error: {
+        errorName: "NonExecutableObserverError"
+      }
+    });
+  });
+
+  it("stops with model_error when the mock queue is exhausted", async () => {
+    const result = await runAgentTask({
+      task: createTask({ maxSteps: 1 }),
+      out: await createOutputDir(),
+      runId: "run-test-model-error",
+      modelAdapter: new MockModelAdapter(),
+      dependencies: {
+        page: createPage(),
+        observe: createObserver(),
+        executeAction: createExecutor([]),
+        evaluator: createEvaluator([])
+      }
+    });
+    const trace = await readJsonl(result.tracePath);
+
+    expect(result.final.status).toBe("model_error");
+    expect(result.final.totals.modelErrors).toBe(1);
+    expect(result.final.errorName).toBe("MockModelQueueExhaustedError");
+    expect(trace[0].model).toMatchObject({
+      adapterName: "mock",
+      errorName: "MockModelQueueExhaustedError"
+    });
+  });
+
+  it("stops with evaluation_error when evaluator throws", async () => {
+    const result = await runAgentTask({
+      task: createTask({ maxSteps: 1 }),
+      out: await createOutputDir(),
+      runId: "run-test-evaluation-error",
+      modelAdapter: new MockModelAdapter({
+        responses: ['{ "type": "wait", "ms": 1 }']
+      }),
+      dependencies: {
+        page: createPage(),
+        observe: createObserver(),
+        executeAction: createExecutor([{ ok: true, actionType: "wait", elapsedMs: 1 }]),
+        evaluator: {
+          name: "throwing-evaluator",
+          async evaluate() {
+            throw new Error("evaluation failed");
+          }
+        }
+      }
+    });
+    const trace = await readJsonl(result.tracePath);
+
+    expect(result.final.status).toBe("evaluation_error");
+    expect(result.final.errorMessage).toBe("evaluation failed");
+    expect(trace[0].error).toMatchObject({
+      errorName: "Error",
+      errorMessage: "evaluation failed"
+    });
+  });
+
+  it("writes final.json for structured observer startup failures", async () => {
+    const result = await runAgentTask({
+      task: createTask({ maxSteps: 1 }),
+      out: await createOutputDir(),
+      runId: "run-test-startup-observer-error",
+      modelAdapter: new MockModelAdapter(),
+      dependencies: {
+        page: createPage({
+          gotoError: new Error("navigation failed")
+        }),
+        observe: createObserver(),
+        executeAction: createExecutor([]),
+        evaluator: createEvaluator([])
+      }
+    });
+    const finalJson = JSON.parse(await readFile(result.finalPath, "utf8"));
+
+    expect(result.final.status).toBe("observer_error");
+    expect(finalJson).toMatchObject({
+      status: "observer_error",
+      errorMessage: "navigation failed",
+      steps: 0
     });
   });
 
@@ -240,6 +356,36 @@ describe("agent run engine", () => {
     expect(trace[0].prompt.systemPrompt).toBeUndefined();
     expect(trace[0].prompt.charCount).toBeGreaterThan(0);
   });
+
+  it("can include full observations and prompts only when explicitly requested", async () => {
+    const result = await runAgentTask({
+      task: createTask({ maxSteps: 1 }),
+      out: await createOutputDir(),
+      runId: "run-test-debug-trace",
+      includeObservations: true,
+      includePrompts: true,
+      modelAdapter: new MockModelAdapter({
+        responses: ['{ "type": "wait", "ms": 1 }']
+      }),
+      dependencies: {
+        page: createPage(),
+        observe: createObserver(),
+        executeAction: createExecutor([{ ok: true, actionType: "wait", elapsedMs: 1 }]),
+        evaluator: createEvaluator([
+          {
+            success: false,
+            elapsedMs: 1,
+            assertions: [{ ok: false, type: "url" }]
+          }
+        ])
+      }
+    });
+    const trace = await readJsonl(result.tracePath);
+
+    expect(trace[0].observation.payload).toBeDefined();
+    expect(trace[0].prompt.systemPrompt).toContain("Output exactly one JSON action object");
+    expect(trace[0].prompt.userPrompt).toContain("Enter test@example.com");
+  });
 });
 
 function createTask(overrides: Partial<AgentTaskConfig> = {}): AgentTaskConfig {
@@ -262,9 +408,13 @@ function createTask(overrides: Partial<AgentTaskConfig> = {}): AgentTaskConfig {
   };
 }
 
-function createPage(): Page {
+function createPage(options: { gotoError?: Error } = {}): Page {
   return {
-    goto: vi.fn(async () => undefined),
+    goto: vi.fn(async () => {
+      if (options.gotoError) {
+        throw options.gotoError;
+      }
+    }),
     waitForSelector: vi.fn(async () => undefined),
     url: vi.fn(() => "http://localhost:4310/checkout?variant=good-a11y")
   } as unknown as Page;

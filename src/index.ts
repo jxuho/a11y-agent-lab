@@ -93,7 +93,11 @@ export { DomPageStateEvaluator } from "./evaluators/dom.js";
 
 export {
   agentTaskConfigSchema,
+  defaultAgentMaxSteps,
+  defaultAppReadyTimeoutMs,
   loadAgentTaskConfig,
+  maxAgentSteps,
+  maxAppReadyTimeoutMs,
   observerModeSchema,
   type AgentTaskConfig,
   type ObserverMode

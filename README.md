@@ -226,6 +226,8 @@ observe -> prompt -> model -> parse -> execute -> evaluate
 
 The evaluator is authoritative for success. A model `finish` action stops the run, but it is reported as `finished_without_success` unless the evaluator assertions pass.
 
+Task config validation is intentionally bounded: `maxSteps` defaults to 8 and must be between 1 and 50; `appReady.timeoutMs` defaults to 10000 ms and must be at most 30000 ms. Invalid task files, unsupported observer names, and malformed evaluator configs fail before a run is initialized.
+
 Example task config:
 
 ```yaml
@@ -270,6 +272,8 @@ final.json
 ```
 
 By default, traces store compact observation previews, observation stats, prompt character/token estimates, model responses, parsed actions, action results, evaluation results, and timings. Full observations and full prompts can be included explicitly with `--include-observations true` and `--include-prompts true`. For PR 11, `dom-compact` is the executable end-to-end observer because it provides stable refs that can be mapped back to DOM targets. v0.3 will add repeated runs, experiment matrices, aggregate metrics, and reporting.
+
+For v0.2 hardening, failed actions stop the run with `action_error`; recovery after failed actions is intentionally deferred. Non-`dom-compact` observers remain useful for snapshot inspection, but `run` reports `observer_error` because those modes do not currently provide executable refs. `final.json` uses one documented status: `success`, `finished_without_success`, `max_steps_exceeded`, `parse_error`, `model_error`, `observer_error`, `evaluation_error`, or `action_error`. Structured failures include `errorName` and `errorMessage` when a run has started.
 
 ## Roadmap
 

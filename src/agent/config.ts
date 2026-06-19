@@ -5,6 +5,11 @@ import { z } from "zod";
 
 import { evaluatorConfigSchema } from "../evaluators/schema.js";
 
+export const defaultAgentMaxSteps = 8;
+export const maxAgentSteps = 50;
+export const defaultAppReadyTimeoutMs = 10_000;
+export const maxAppReadyTimeoutMs = 30_000;
+
 export const observerModeSchema = z.enum(["dom-compact", "aria-snapshot", "cdp-ax"]);
 
 export const agentTaskConfigSchema = z
@@ -13,12 +18,12 @@ export const agentTaskConfigSchema = z
     name: z.string().min(1).optional(),
     url: z.string().url(),
     instruction: z.string().min(1),
-    maxSteps: z.number().int().positive().max(100).default(8),
+    maxSteps: z.number().int().min(1).max(maxAgentSteps).default(defaultAgentMaxSteps),
     observer: observerModeSchema.default("dom-compact"),
     appReady: z
       .object({
         selector: z.string().min(1).optional(),
-        timeoutMs: z.number().int().positive().default(10_000)
+        timeoutMs: z.number().int().min(1).max(maxAppReadyTimeoutMs).default(defaultAppReadyTimeoutMs)
       })
       .strict()
       .optional(),

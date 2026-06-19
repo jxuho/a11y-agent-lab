@@ -78,5 +78,6 @@ describe("DOM compact ref registry", () => {
     expect(locator.type).toHaveBeenCalledWith("!");
     expect(locator.selectOption).toHaveBeenCalledWith("express");
     await expect(registry.resolve("dom-404")).resolves.toBeNull();
+    await expect(registry.resolve("dom-3")).resolves.toBeNull();
   });
 });
