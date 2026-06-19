@@ -14,7 +14,8 @@
     "build": "tsc -p tsconfig.json",
     "test": "vitest run",
     "dev": "tsx src/cli.ts",
-    "cli": "node dist/cli.js"
+    "cli": "node dist/cli.js",
+    "fixture:checkout": "tsx src/fixtures/server.ts"
   },
   "dependencies": {
     "zod": "^3.25.67"

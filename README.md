@@ -4,7 +4,7 @@
 
 The core research question is how different web observation modes, such as Chrome DevTools Protocol accessibility trees, Playwright ARIA snapshots, and compact DOM serialization, affect an AI agent's success rate, step count, token usage, latency, and invalid-action rate.
 
-This repository is currently an initial TypeScript scaffold. It intentionally does not implement browser automation, observers, LLM calls, action executors, evaluators, experiment runners, or report viewers yet.
+This repository currently contains the initial TypeScript scaffold and a deterministic local checkout fixture app. It intentionally does not implement browser automation, observers, LLM calls, action executors, evaluators, experiment runners, or report viewers yet.
 
 ## Current Scope
 
@@ -12,6 +12,7 @@ This repository is currently an initial TypeScript scaffold. It intentionally do
 - Strict TypeScript configuration
 - zod-based config schema placeholders
 - Vitest setup
+- Local checkout fixture app with accessibility variants
 
 ## Commands
 
@@ -19,9 +20,44 @@ This repository is currently an initial TypeScript scaffold. It intentionally do
 npm run build
 npm test
 npm run cli -- --help
+npm run fixture:checkout
 ```
 
 The command skeletons are present so the project shape is clear, but they fail with explicit placeholder messages until their roadmap phase is implemented.
+
+## Checkout Fixture App
+
+The local checkout fixture is a deterministic HTML app used by future snapshot and agent experiments. It is intentionally small and has stable `data-test` hooks for tests and future observation tooling.
+
+Start it locally:
+
+```bash
+npm run fixture:checkout
+```
+
+By default, the fixture server listens on `http://localhost:4310`. To use a different port:
+
+```bash
+FIXTURE_PORT=4321 npm run fixture:checkout
+```
+
+Open the checkout variants:
+
+- `http://localhost:4310/checkout?variant=good-a11y`
+- `http://localhost:4310/checkout?variant=no-label`
+- `http://localhost:4310/checkout?variant=icon-only-button`
+- `http://localhost:4310/checkout?variant=duplicate-names`
+- `http://localhost:4310/checkout?variant=hidden-noise`
+
+Every fixture page renders `body[data-ai-ready="true"]` when ready. Unknown or omitted variants fall back to `good-a11y`.
+
+Variant intent:
+
+- `good-a11y`: semantic checkout form with headings, labels, meaningful buttons, and accessible controls.
+- `no-label`: intentionally weakens or removes labels from selected form fields.
+- `icon-only-button`: includes an icon-only discount button without a useful accessible name.
+- `duplicate-names`: includes multiple interactive controls with the same accessible name.
+- `hidden-noise`: includes hidden legacy DOM content that does not affect the visual UI but can affect future DOM serialization experiments.
 
 ## Roadmap
 
