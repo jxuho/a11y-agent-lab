@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 
 import { appConfigSchema } from "./config/schema.js";
+import { loadAgentTaskConfig } from "./agent/config.js";
+import { loadMockActionResponses } from "./agent/mockActions.js";
+import { getAgentRunHelpText, parseAgentRunArgs } from "./agent/options.js";
+import { runAgentTask } from "./agent/runner.js";
+import { MockModelAdapter } from "./models/mock.js";
+import { NotConfiguredModelAdapter } from "./models/notConfigured.js";
 import { getSnapshotHelpText, parseSnapshotArgs } from "./snapshot/options.js";
 import { runSnapshot } from "./snapshot/runner.js";
 import {
@@ -75,7 +81,15 @@ export function getHelpText(): string {
     "  --timeout-ms <number>          Default: 15000",
     "  --headless <true|false>        Default: true",
     "",
-    "LLM calls, action execution, evaluation, and agent experiment running are intentionally out of scope for this Snapshot Lab."
+    "Run options:",
+    "  a11y-agent-lab run <task.yaml> --out <output-directory>",
+    "  --observer <dom-compact|aria-snapshot|cdp-ax>",
+    "  --model <mock|placeholder>     Default: mock",
+    "  --mock-actions <path>",
+    "  --max-steps <number>",
+    "  --headless <true|false>        Default: true",
+    "",
+    "Experiment matrices and aggregate reporting are planned for v0.3."
   ].join("\n");
 }
 
@@ -84,7 +98,7 @@ export function getVersionText(): string {
 }
 
 export function getCommandMessage(commandName: CommandName): string {
-  if (commandName === "snapshot" || commandName === "snapshot-suite") {
+  if (commandName === "snapshot" || commandName === "snapshot-suite" || commandName === "run") {
     return `${commandName} is implemented. Run \`a11y-agent-lab ${commandName} --help\` for options.`;
   }
 
@@ -150,6 +164,38 @@ export async function runCli(argv: string[]): Promise<number> {
       `Snapshot suite complete: ${result.summary.successfulSnapshotCount} succeeded, ${result.summary.failedSnapshotCount} failed`
     );
     return result.summary.failedSnapshotCount > 0 ? 1 : 0;
+  }
+
+  if (firstArg === "run") {
+    if (restArgs[0] === "--help" || restArgs[0] === "-h") {
+      console.log(getAgentRunHelpText());
+      return 0;
+    }
+
+    const options = parseAgentRunArgs(restArgs);
+    const task = await loadAgentTaskConfig(options.config);
+    const modelAdapter =
+      options.model === "mock"
+        ? new MockModelAdapter({
+            responses: options.mockActions ? await loadMockActionResponses(options.mockActions) : []
+          })
+        : new NotConfiguredModelAdapter("placeholder");
+    const result = await runAgentTask({
+      task,
+      out: options.out,
+      modelAdapter,
+      headless: options.headless,
+      observer: options.observer,
+      maxSteps: options.maxSteps,
+      includeObservations: options.includeObservations,
+      includePrompts: options.includePrompts,
+      allowJsAssertions: options.allowJsAssertions
+    });
+
+    console.log(`Saved trace: ${result.tracePath}`);
+    console.log(`Saved final result: ${result.finalPath}`);
+    console.log(`Agent run complete: ${result.final.status}`);
+    return result.final.success ? 0 : 1;
   }
 
   if (commandNames.has(firstArg)) {

@@ -90,3 +90,32 @@ export {
 } from "./evaluators/types.js";
 
 export { DomPageStateEvaluator } from "./evaluators/dom.js";
+
+export {
+  agentTaskConfigSchema,
+  loadAgentTaskConfig,
+  observerModeSchema,
+  type AgentTaskConfig,
+  type ObserverMode
+} from "./agent/config.js";
+
+export {
+  agentRunCliOptionsSchema,
+  getAgentRunHelpText,
+  parseAgentRunArgs,
+  type AgentRunCliOptions
+} from "./agent/options.js";
+
+export { loadMockActionResponses } from "./agent/mockActions.js";
+
+export {
+  observePage,
+  runAgentTask,
+  type AgentObservation,
+  type AgentRunDependencies,
+  type AgentRunFinalResult,
+  type AgentRunResult,
+  type AgentRunStatus,
+  type AgentStepTrace,
+  type RunAgentTaskInput
+} from "./agent/runner.js";

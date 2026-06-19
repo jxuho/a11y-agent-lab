@@ -12,6 +12,7 @@ describe("CLI skeleton", () => {
     expect(helpText).toContain("--out <output-directory>");
     expect(helpText).toContain("--snapshot-root <selector>");
     expect(helpText).toContain("--config <path>");
+    expect(helpText).toContain("--mock-actions <path>");
     expect(helpText).toContain("run");
     expect(helpText).toContain("experiment");
   });
@@ -20,8 +21,8 @@ describe("CLI skeleton", () => {
     expect(getVersionText()).toBe("a11y-agent-lab 0.1.0");
   });
 
-  it("returns a clear placeholder message for command skeletons", () => {
-    expect(getCommandMessage("run")).toContain("intentionally out of scope");
+  it("returns a clear placeholder message for future command skeletons", () => {
+    expect(getCommandMessage("run")).toContain("implemented");
     expect(getCommandMessage("experiment")).toContain("intentionally out of scope");
   });
 
@@ -48,6 +49,15 @@ describe("CLI skeleton", () => {
 
     await expect(runCli(["snapshot-suite", "--help"])).resolves.toBe(0);
     expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("Snapshot suite options"));
+
+    logSpy.mockRestore();
+  });
+
+  it("returns success for run help", async () => {
+    const logSpy = vi.spyOn(console, "log").mockImplementation(() => undefined);
+
+    await expect(runCli(["run", "--help"])).resolves.toBe(0);
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("Agent run options"));
 
     logSpy.mockRestore();
   });

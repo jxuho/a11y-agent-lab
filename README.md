@@ -4,7 +4,7 @@
 
 The core research question is how different web observation modes, such as Chrome DevTools Protocol accessibility trees, Playwright ARIA snapshots, and compact DOM serialization, affect an AI agent's success rate, step count, token usage, latency, and invalid-action rate.
 
-This repository currently contains v0.1 Snapshot Lab: a deterministic checkout fixture app, single-page snapshots, CDP AX output, Playwright ARIA snapshots, compact DOM serialization, and a snapshot suite runner. v0.2 foundation work has started with a constrained action schema, ref-based action executor, model adapter interface, deterministic mock adapter, prompt builder, strict JSON action response parser, and DOM/page-state evaluator. It intentionally does not implement real LLM calls, a full agent loop, agent experiment runners, or report viewers yet.
+This repository currently contains v0.1 Snapshot Lab: a deterministic checkout fixture app, single-page snapshots, CDP AX output, Playwright ARIA snapshots, compact DOM serialization, and a snapshot suite runner. v0.2 now includes a minimal single-task Agent Runner with a constrained action schema, ref-based action executor, model adapter interface, deterministic mock adapter, prompt builder, strict JSON action response parser, DOM/page-state evaluator, and step-level trace logging. It intentionally does not implement real LLM calls, experiment matrices, aggregate reporting, or report viewers yet.
 
 ## Current Scope
 
@@ -19,6 +19,7 @@ This repository currently contains v0.1 Snapshot Lab: a deterministic checkout f
 - v0.2 action schema foundation with zod validation and ref-based execution targets
 - v0.2 model/prompt foundation with provider-independent adapter interfaces and strict action response parsing
 - v0.2 evaluator foundation with zod config schemas and structured page-state assertion results
+- v0.2 `run` command for one task at a time with `trace.jsonl` and `final.json`
 
 ## Commands
 
@@ -211,11 +212,64 @@ The executor consumes validated actions plus a `RefRegistry`. DOM compact observ
 
 The next v0.2 foundation module adds provider-independent model adapters, a deterministic `MockModelAdapter`, a not-configured real-model placeholder, a deterministic prompt builder, and a strict response parser. The prompt builder produces `systemPrompt` and `userPrompt` strings from the task, current URL, observation mode, observation content, and optional previous step summaries. The parser accepts only one full JSON object and validates it against the action schema above; markdown, prose-wrapped JSON, arrays, unsupported actions, malformed JSON, and multiple JSON objects fail clearly.
 
-These pieces are intended for the future `run` command's observe -> prompt -> model -> parse -> execute loop, but that loop is not implemented yet.
+These pieces are now connected by the v0.2 `run` command for a single task at a time.
 
 The evaluator foundation adds a `DomPageStateEvaluator` that checks browser state after actions execute. It supports configured assertions for page text, input values, URL conditions, and minimal trusted JS expressions. Evaluation results include overall `success`, `elapsedMs`, and one structured result per assertion. Missing selectors and assertion errors become failed assertion results instead of crashing the whole evaluation.
 
 JS assertions are for trusted local experiment configs only. They must never come from model output, prompt output, action output, or untrusted runtime sources. Runtime evaluation defaults to `allowJsAssertions: false`; callers must explicitly enable it when they are loading trusted local configs.
+
+The v0.2 `run` command executes one task, not an experiment matrix. Its loop is:
+
+```text
+observe -> prompt -> model -> parse -> execute -> evaluate
+```
+
+The evaluator is authoritative for success. A model `finish` action stops the run, but it is reported as `finished_without_success` unless the evaluator assertions pass.
+
+Example task config:
+
+```yaml
+id: checkout_email_001
+url: "http://localhost:4310/checkout?variant=good-a11y"
+instruction: "Enter test@example.com into the email field."
+maxSteps: 2
+observer: "dom-compact"
+appReady:
+  selector: 'body[data-ai-ready="true"]'
+  timeoutMs: 10000
+evaluator:
+  assertions:
+    - type: inputValue
+      selector: '[data-test="email"]'
+      equals: "test@example.com"
+      description: "Email input should contain requested email"
+```
+
+Mock model actions are loaded from a JSON array and returned as strict JSON actions in order:
+
+```json
+[
+  { "type": "type", "ref": "dom-14", "text": "test@example.com" }
+]
+```
+
+Run the task:
+
+```bash
+npm run cli -- run task.yaml \
+  --out results/runs/checkout-email \
+  --model mock \
+  --mock-actions mock-actions.json
+```
+
+The output directory contains:
+
+```text
+trace.jsonl
+final.json
+```
+
+By default, traces store compact observation previews, observation stats, prompt character/token estimates, model responses, parsed actions, action results, evaluation results, and timings. Full observations and full prompts can be included explicitly with `--include-observations true` and `--include-prompts true`. For PR 11, `dom-compact` is the executable end-to-end observer because it provides stable refs that can be mapped back to DOM targets. v0.3 will add repeated runs, experiment matrices, aggregate metrics, and reporting.
 
 ## Roadmap
 
