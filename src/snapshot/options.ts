@@ -2,11 +2,13 @@ import { z } from "zod";
 
 export const defaultReadySelector = 'body[data-ai-ready="true"]';
 export const defaultSnapshotTimeoutMs = 15_000;
+export const defaultSnapshotRoot = "body";
 
 export const snapshotOptionsSchema = z.object({
   url: z.string().url(),
   out: z.string().min(1),
   readySelector: z.string().min(1).default(defaultReadySelector),
+  snapshotRoot: z.string().min(1).default(defaultSnapshotRoot),
   timeoutMs: z.number().int().positive().default(defaultSnapshotTimeoutMs),
   headless: z.boolean().default(true)
 });
@@ -26,6 +28,7 @@ export function getSnapshotHelpText(): string {
     "  --url <url>                    Page URL to open",
     "  --out <output-directory>       Directory for snapshot output files",
     `  --ready-selector <selector>    Ready selector to wait for (default: ${defaultReadySelector})`,
+    `  --snapshot-root <selector>     Root selector for Playwright ARIA snapshot (default: ${defaultSnapshotRoot})`,
     `  --timeout-ms <number>          Navigation and ready wait timeout (default: ${defaultSnapshotTimeoutMs})`,
     "  --headless <true|false>        Run Chromium headlessly (default: true)",
     "  -h, --help                     Show snapshot help"
@@ -59,6 +62,9 @@ export function parseSnapshotArgs(argv: string[]): ParsedSnapshotArgs {
         break;
       case "--ready-selector":
         values.readySelector = value;
+        break;
+      case "--snapshot-root":
+        values.snapshotRoot = value;
         break;
       case "--timeout-ms":
         values.timeoutMs = parseTimeoutMs(value);

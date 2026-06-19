@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   defaultReadySelector,
+  defaultSnapshotRoot,
   defaultSnapshotTimeoutMs,
   parseSnapshotArgs
 } from "../src/snapshot/options.js";
@@ -20,6 +21,7 @@ describe("snapshot CLI options", () => {
       url: "http://localhost:4310/checkout?variant=good-a11y",
       out: "results/snapshots/checkout-good",
       readySelector: defaultReadySelector,
+      snapshotRoot: defaultSnapshotRoot,
       timeoutMs: defaultSnapshotTimeoutMs,
       headless: true
     });
@@ -33,6 +35,8 @@ describe("snapshot CLI options", () => {
       "tmp/snapshot",
       "--ready-selector",
       "main",
+      "--snapshot-root",
+      "form",
       "--timeout-ms",
       "5000",
       "--headless",
@@ -40,6 +44,7 @@ describe("snapshot CLI options", () => {
     ]);
 
     expect(options.readySelector).toBe("main");
+    expect(options.snapshotRoot).toBe("form");
     expect(options.timeoutMs).toBe(5000);
     expect(options.headless).toBe(false);
   });

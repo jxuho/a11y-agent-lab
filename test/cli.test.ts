@@ -9,6 +9,7 @@ describe("CLI skeleton", () => {
     expect(helpText).toContain("snapshot");
     expect(helpText).toContain("--url <url>");
     expect(helpText).toContain("--out <output-directory>");
+    expect(helpText).toContain("--snapshot-root <selector>");
     expect(helpText).toContain("run");
     expect(helpText).toContain("experiment");
   });

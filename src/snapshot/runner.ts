@@ -3,6 +3,7 @@ import path from "node:path";
 
 import { chromium } from "playwright";
 
+import { observeAriaSnapshot } from "../observers/ariaSnapshot.js";
 import { observeCdpAccessibility } from "../observers/cdpAx.js";
 import type { SnapshotOptions } from "./options.js";
 
@@ -25,6 +26,8 @@ export interface SnapshotResult {
   metadataPath: string;
   cdpAxPath: string;
   cdpAxSummaryPath: string;
+  ariaPath: string;
+  ariaSummaryPath: string;
   metadata: SnapshotMetadata;
 }
 
@@ -54,6 +57,8 @@ export async function runSnapshot(options: SnapshotOptions): Promise<SnapshotRes
     const metadataPath = path.join(options.out, "metadata.json");
     const cdpAxPath = path.join(options.out, "cdp-ax.json");
     const cdpAxSummaryPath = path.join(options.out, "cdp-ax-summary.json");
+    const ariaPath = path.join(options.out, "aria.yml");
+    const ariaSummaryPath = path.join(options.out, "aria-summary.json");
     const metadata = createSnapshotMetadata({
       options,
       finalUrl: page.url(),
@@ -65,6 +70,10 @@ export async function runSnapshot(options: SnapshotOptions): Promise<SnapshotRes
     metadata.userAgent = userAgent;
 
     const cdpAxObservation = await observeCdpAccessibility(page, {
+      timestamp: metadata.timestamp
+    });
+    const ariaSnapshotObservation = await observeAriaSnapshot(page, {
+      snapshotRoot: options.snapshotRoot,
       timestamp: metadata.timestamp
     });
 
@@ -79,12 +88,20 @@ export async function runSnapshot(options: SnapshotOptions): Promise<SnapshotRes
       `${JSON.stringify(cdpAxObservation.summary, null, 2)}\n`,
       "utf8"
     );
+    await writeFile(ariaPath, ariaSnapshotObservation.snapshot, "utf8");
+    await writeFile(
+      ariaSummaryPath,
+      `${JSON.stringify(ariaSnapshotObservation.summary, null, 2)}\n`,
+      "utf8"
+    );
 
     return {
       screenshotPath,
       metadataPath,
       cdpAxPath,
       cdpAxSummaryPath,
+      ariaPath,
+      ariaSummaryPath,
       metadata
     };
   } finally {

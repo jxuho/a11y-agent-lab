@@ -13,7 +13,7 @@ This repository currently contains the initial TypeScript scaffold, a determinis
 - zod-based config schema placeholders
 - Vitest setup
 - Local checkout fixture app with accessibility variants
-- Playwright snapshot command with screenshot, metadata, and CDP AX output
+- Playwright snapshot command with screenshot, metadata, CDP AX output, and ARIA snapshot output
 
 ## Commands
 
@@ -24,7 +24,7 @@ npm run cli -- --help
 npm run fixture:checkout
 ```
 
-The `snapshot` command can open a local fixture page, wait for readiness, and write a screenshot, basic metadata, and CDP AX output. ARIA snapshots and compact DOM serialization are still intentionally out of scope. The `run` and `experiment` commands remain placeholders until their roadmap phases.
+The `snapshot` command can open a local fixture page, wait for readiness, and write a screenshot, basic metadata, CDP AX output, and Playwright ARIA snapshot output. Compact DOM serialization is still intentionally out of scope. The `run` and `experiment` commands remain placeholders until their roadmap phases.
 
 ## Checkout Fixture App
 
@@ -62,7 +62,7 @@ Variant intent:
 
 ## Snapshot Command
 
-The snapshot command is the first v0.1 browser foundation. It launches Chromium with Playwright, opens the provided URL, waits for a ready selector, captures the browser-computed CDP accessibility tree, creates the output directory if needed, and writes:
+The snapshot command is the first v0.1 browser foundation. It launches Chromium with Playwright, opens the provided URL, waits for a ready selector, captures the browser-computed CDP accessibility tree and Playwright ARIA snapshot, creates the output directory if needed, and writes:
 
 ```text
 <out>/
@@ -70,9 +70,13 @@ The snapshot command is the first v0.1 browser foundation. It launches Chromium 
   metadata.json
   cdp-ax.json
   cdp-ax-summary.json
+  aria.yml
+  aria-summary.json
 ```
 
 `cdp-ax.json` preserves the raw Chrome DevTools Protocol `Accessibility.getFullAXTree` response. `cdp-ax-summary.json` contains normalized node fields and basic CDP AX stats, including total node count, ignored node count, interactive node count, unnamed interactive count, and duplicate interactive name count.
+
+`aria.yml` preserves the string returned by Playwright `locator.ariaSnapshot()`. `aria-summary.json` contains lightweight text-derived stats, including character count, line count, role-specific line counts, unnamed interactive line count, and the first 20 non-empty preview lines.
 
 Run it against the checkout fixture:
 
@@ -92,10 +96,20 @@ npm run cli -- snapshot \
 Options:
 
 - `--url <url>`: page URL to open.
-- `--out <output-directory>`: where `screenshot.png` and `metadata.json` are written.
+- `--out <output-directory>`: where the snapshot output files are written.
 - `--ready-selector <selector>`: selector to wait for before capturing. Defaults to `body[data-ai-ready="true"]`.
+- `--snapshot-root <selector>`: root locator for the Playwright ARIA snapshot. Defaults to `body`.
 - `--timeout-ms <number>`: navigation and ready wait timeout. Defaults to `15000`.
 - `--headless <true|false>`: run Chromium headlessly. Defaults to `true`.
+
+Example with a narrower ARIA snapshot root:
+
+```bash
+npm run cli -- snapshot \
+  --url "http://localhost:4310/checkout?variant=good-a11y" \
+  --out "results/snapshots/checkout-good-form" \
+  --snapshot-root "form"
+```
 
 Example variant snapshots:
 
