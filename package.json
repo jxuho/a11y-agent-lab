@@ -1,0 +1,31 @@
+{
+  "name": "a11y-agent-lab",
+  "version": "0.1.0",
+  "description": "Experimental platform for comparing AI web-agent observation modes.",
+  "type": "module",
+  "bin": {
+    "a11y-agent-lab": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "dev": "tsx src/cli.ts",
+    "cli": "node dist/cli.js"
+  },
+  "dependencies": {
+    "zod": "^3.25.67"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.3",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
