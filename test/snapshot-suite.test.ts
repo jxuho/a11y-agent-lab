@@ -44,6 +44,30 @@ describe("snapshot suite config", () => {
     ]);
   });
 
+  it("reports useful config validation errors", async () => {
+    const tempDir = await mkdtemp(path.join(tmpdir(), "a11y-config-"));
+    const configPath = path.join(tempDir, "bad.snapshot.yaml");
+
+    await writeFile(
+      configPath,
+      [
+        "id: checkout",
+        "baseUrl: not-a-url",
+        "variants:",
+        "  - id: bad",
+        "    query: ?variant=bad"
+      ].join("\n"),
+      "utf8"
+    );
+
+    await expect(loadSnapshotSuiteConfig(configPath)).rejects.toThrow(
+      "Invalid snapshot suite config"
+    );
+    await expect(loadSnapshotSuiteConfig(path.join(tempDir, "missing.yaml"))).rejects.toThrow(
+      "Unable to read snapshot suite config"
+    );
+  });
+
   it("rejects variants that define both path and query", () => {
     expect(() =>
       snapshotSuiteConfigSchema.parse({
@@ -266,7 +290,9 @@ describe("snapshot suite runner", () => {
     expect(result.summary.variantCount).toBe(2);
     expect(result.summary.successfulSnapshotCount).toBe(1);
     expect(result.summary.failedSnapshotCount).toBe(1);
+    expect(result.summary.variants[1].errorName).toBe("Error");
     expect(result.summary.variants[1].errorMessage).toBe("variant failed");
+    expect(result.summary.variants[0].outDir).toBe(path.join(tempDir, "checkout", "good-a11y"));
     expect(await readFile(result.summaryPath, "utf8")).toContain('"failedSnapshotCount": 1');
     expect(await readFile(result.csvPath, "utf8")).toContain("variant failed");
   });
@@ -276,39 +302,71 @@ async function writeSampleVariantSummaries(outDir: string): Promise<void> {
   await writeFile(
     path.join(outDir, "cdp-ax-summary.json"),
     JSON.stringify({
+      mode: "cdp-ax",
+      url: "http://localhost:4310/checkout?variant=good-a11y",
+      finalUrl: "http://localhost:4310/checkout?variant=good-a11y",
+      title: "Checkout",
+      timestamp: "2026-06-19T00:00:00.000Z",
       stats: {
         totalNodeCount: 100,
+        ignoredNodeCount: 10,
+        nonIgnoredNodeCount: 90,
         interactiveNodeCount: 12,
         unnamedInteractiveNodeCount: 0,
         duplicateInteractiveNameCount: 0
-      }
+      },
+      nodes: []
     }),
     "utf8"
   );
   await writeFile(
     path.join(outDir, "aria-summary.json"),
     JSON.stringify({
+      mode: "aria-snapshot",
+      url: "http://localhost:4310/checkout?variant=good-a11y",
+      finalUrl: "http://localhost:4310/checkout?variant=good-a11y",
+      title: "Checkout",
+      timestamp: "2026-06-19T00:00:00.000Z",
+      snapshotRoot: "body",
       stats: {
         charCount: 1200,
         lineCount: 40,
         nonEmptyLineCount: 40,
-        approxTokenCount: 300
-      }
+        approxTokenCount: 300,
+        roleLineCount: 20,
+        buttonLineCount: 3,
+        textboxLineCount: 8,
+        checkboxLineCount: 1,
+        linkLineCount: 0,
+        unnamedInteractiveLineCount: 0
+      },
+      previewLines: []
     }),
     "utf8"
   );
   await writeFile(
     path.join(outDir, "dom-summary.json"),
     JSON.stringify({
+      mode: "dom-compact",
+      url: "http://localhost:4310/checkout?variant=good-a11y",
+      finalUrl: "http://localhost:4310/checkout?variant=good-a11y",
+      title: "Checkout",
+      timestamp: "2026-06-19T00:00:00.000Z",
       stats: {
         elementCount: 40,
         serializedElementCount: 30,
+        textNodeCount: 20,
         interactiveElementCount: 10,
         unnamedInteractiveElementCount: 0,
         hiddenElementCount: 1,
+        linkCount: 0,
+        buttonCount: 3,
+        inputCount: 8,
+        formControlCount: 11,
         charCount: 4000,
         approxTokenCount: 1000
-      }
+      },
+      previewElements: []
     }),
     "utf8"
   );

@@ -10,7 +10,9 @@ export const snapshotOptionsSchema = z.object({
   readySelector: z.string().min(1).default(defaultReadySelector),
   snapshotRoot: z.string().min(1).default(defaultSnapshotRoot),
   timeoutMs: z.number().int().positive().default(defaultSnapshotTimeoutMs),
-  headless: z.boolean().default(true)
+  headless: z.boolean().default(true),
+  variantId: z.string().min(1).optional(),
+  suiteId: z.string().min(1).optional()
 });
 
 export type SnapshotOptions = z.infer<typeof snapshotOptionsSchema>;

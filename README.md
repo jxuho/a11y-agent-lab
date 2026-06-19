@@ -4,16 +4,18 @@
 
 The core research question is how different web observation modes, such as Chrome DevTools Protocol accessibility trees, Playwright ARIA snapshots, and compact DOM serialization, affect an AI agent's success rate, step count, token usage, latency, and invalid-action rate.
 
-This repository currently contains the initial TypeScript scaffold, a deterministic local checkout fixture app, and the first Snapshot Lab browser capture path. It intentionally does not implement LLM calls, action executors, evaluators, experiment runners, or report viewers yet.
+This repository currently contains v0.1 Snapshot Lab: a deterministic checkout fixture app, single-page snapshots, CDP AX output, Playwright ARIA snapshots, compact DOM serialization, and a snapshot suite runner. It intentionally does not implement LLM calls, action executors, evaluators, agent experiment runners, or report viewers yet.
 
 ## Current Scope
 
+- v0.1 Snapshot Lab is implemented and hardened
 - CLI skeleton with `snapshot`, `run`, and `experiment` commands
 - Strict TypeScript configuration
 - zod-based config schema placeholders
 - Vitest setup
 - Local checkout fixture app with accessibility variants
 - Playwright snapshot command with screenshot, metadata, CDP AX output, ARIA snapshot output, and compact DOM output
+- YAML-based `snapshot-suite` command with suite `summary.json` and `results.csv`
 
 ## Commands
 
@@ -25,6 +27,8 @@ npm run fixture:checkout
 ```
 
 The `snapshot` command can open a local fixture page, wait for readiness, and write a screenshot, basic metadata, CDP AX output, Playwright ARIA snapshot output, and compact DOM output. The `run` and `experiment` commands remain placeholders until their roadmap phases.
+
+See [docs/output-contracts.md](docs/output-contracts.md) for v0.1 output schemas and [docs/v0.1-validation.md](docs/v0.1-validation.md) for a manual validation checklist.
 
 ## Checkout Fixture App
 
@@ -177,6 +181,13 @@ results/snapshots/checkout/
 ```
 
 `summary.json` records suite metadata, success and failure counts, one entry per variant, and selected stats from CDP AX, ARIA snapshot, and compact DOM summaries. `results.csv` flattens those values into one row per variant for quick comparison. If one variant fails, the suite continues and records the error in both files.
+
+Quick inspection examples:
+
+```bash
+node -e "const s=require('./results/snapshots/checkout/summary.json'); console.log(s.successfulSnapshotCount, s.failedSnapshotCount)"
+sed -n '1,6p' results/snapshots/checkout/results.csv
+```
 
 ## Roadmap
 

@@ -56,8 +56,11 @@ export interface DomCompactStats {
 export interface DomCompactObservation {
   mode: typeof domCompactMode;
   url: string;
+  finalUrl?: string;
   title: string;
   timestamp: string;
+  variantId?: string;
+  suiteId?: string;
   root: string;
   elements: DomCompactElement[];
 }
@@ -65,8 +68,11 @@ export interface DomCompactObservation {
 export interface DomCompactSummary {
   mode: typeof domCompactMode;
   url: string;
+  finalUrl?: string;
   title: string;
   timestamp: string;
+  variantId?: string;
+  suiteId?: string;
   stats: DomCompactStats;
   previewElements: DomCompactElement[];
 }
@@ -90,14 +96,19 @@ export interface DomCompactObservationResult {
 export interface ObserveDomCompactOptions {
   root?: string;
   timestamp?: string;
+  variantId?: string;
+  suiteId?: string;
 }
 
 export interface CreateDomCompactObservationInput {
   elements: DomCompactElement[];
   url: string;
+  finalUrl?: string;
   title: string;
   root: string;
   timestamp?: string;
+  variantId?: string;
+  suiteId?: string;
 }
 
 export async function observeDomCompact(
@@ -109,9 +120,12 @@ export async function observeDomCompact(
   const observation = createDomCompactObservation({
     elements: pageResult.elements,
     url: page.url(),
+    finalUrl: page.url(),
     title: await page.title(),
     root,
-    timestamp: options.timestamp
+    timestamp: options.timestamp,
+    variantId: options.variantId,
+    suiteId: options.suiteId
   });
 
   return {
@@ -126,8 +140,11 @@ export function createDomCompactObservation(
   return {
     mode: domCompactMode,
     url: input.url,
+    ...(input.finalUrl ? { finalUrl: input.finalUrl } : {}),
     title: input.title,
     timestamp: input.timestamp ?? new Date().toISOString(),
+    ...(input.variantId ? { variantId: input.variantId } : {}),
+    ...(input.suiteId ? { suiteId: input.suiteId } : {}),
     root: input.root,
     elements: input.elements
   };
@@ -140,8 +157,11 @@ export function createDomCompactSummary(
   return {
     mode: domCompactMode,
     url: observation.url,
+    ...(observation.finalUrl ? { finalUrl: observation.finalUrl } : {}),
     title: observation.title,
     timestamp: observation.timestamp,
+    ...(observation.variantId ? { variantId: observation.variantId } : {}),
+    ...(observation.suiteId ? { suiteId: observation.suiteId } : {}),
     stats: calculateDomCompactStats(observation.elements, baseStats),
     previewElements: observation.elements.slice(0, 20)
   };

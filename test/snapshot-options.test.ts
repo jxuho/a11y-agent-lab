@@ -90,6 +90,7 @@ describe("snapshot metadata", () => {
     });
 
     expect(metadata).toEqual({
+      mode: "snapshot-metadata",
       url: "http://localhost:4310/checkout?variant=good-a11y",
       finalUrl: "http://localhost:4310/checkout?variant=good-a11y",
       title: "A11y Agent Lab - Checkout Fixture",
@@ -99,6 +100,7 @@ describe("snapshot metadata", () => {
         height: 720
       },
       readySelector: defaultReadySelector,
+      snapshotRoot: defaultSnapshotRoot,
       timeoutMs: defaultSnapshotTimeoutMs,
       userAgent: "test-agent"
     });

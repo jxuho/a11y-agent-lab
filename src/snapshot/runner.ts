@@ -6,18 +6,30 @@ import { chromium } from "playwright";
 import { observeAriaSnapshot } from "../observers/ariaSnapshot.js";
 import { observeCdpAccessibility } from "../observers/cdpAx.js";
 import { observeDomCompact } from "../observers/domCompact.js";
+import {
+  ariaSummarySchema,
+  cdpAxSummarySchema,
+  domCompactObservationSchema,
+  domSummarySchema,
+  snapshotMetadataSchema,
+  validateJsonOutput
+} from "../schemas/output.js";
 import type { SnapshotOptions } from "./options.js";
 
 export interface SnapshotMetadata {
+  mode: "snapshot-metadata";
   url: string;
   finalUrl: string;
   title: string;
   timestamp: string;
+  variantId?: string;
+  suiteId?: string;
   viewport: {
     width: number;
     height: number;
   } | null;
   readySelector: string;
+  snapshotRoot: string;
   timeoutMs: number;
   userAgent?: string;
 }
@@ -75,42 +87,52 @@ export async function runSnapshot(options: SnapshotOptions): Promise<SnapshotRes
     metadata.userAgent = userAgent;
 
     const cdpAxObservation = await observeCdpAccessibility(page, {
-      timestamp: metadata.timestamp
+      timestamp: metadata.timestamp,
+      variantId: options.variantId,
+      suiteId: options.suiteId
     });
     const ariaSnapshotObservation = await observeAriaSnapshot(page, {
       snapshotRoot: options.snapshotRoot,
-      timestamp: metadata.timestamp
+      timestamp: metadata.timestamp,
+      variantId: options.variantId,
+      suiteId: options.suiteId
     });
     const domCompactObservation = await observeDomCompact(page, {
-      timestamp: metadata.timestamp
+      timestamp: metadata.timestamp,
+      variantId: options.variantId,
+      suiteId: options.suiteId
     });
 
     await page.screenshot({
       path: screenshotPath,
       fullPage: true
     });
-    await writeFile(metadataPath, `${JSON.stringify(metadata, null, 2)}\n`, "utf8");
+    await writeJsonFile(metadataPath, snapshotMetadataSchema, metadata, "snapshot metadata");
     await writeFile(cdpAxPath, `${JSON.stringify(cdpAxObservation.rawTree, null, 2)}\n`, "utf8");
-    await writeFile(
+    await writeJsonFile(
       cdpAxSummaryPath,
-      `${JSON.stringify(cdpAxObservation.summary, null, 2)}\n`,
-      "utf8"
+      cdpAxSummarySchema,
+      cdpAxObservation.summary,
+      "CDP AX summary"
     );
     await writeFile(ariaPath, ariaSnapshotObservation.snapshot, "utf8");
-    await writeFile(
+    await writeJsonFile(
       ariaSummaryPath,
-      `${JSON.stringify(ariaSnapshotObservation.summary, null, 2)}\n`,
-      "utf8"
+      ariaSummarySchema,
+      ariaSnapshotObservation.summary,
+      "ARIA summary"
     );
-    await writeFile(
+    await writeJsonFile(
       domCompactPath,
-      `${JSON.stringify(domCompactObservation.observation, null, 2)}\n`,
-      "utf8"
+      domCompactObservationSchema,
+      domCompactObservation.observation,
+      "compact DOM observation"
     );
-    await writeFile(
+    await writeJsonFile(
       domSummaryPath,
-      `${JSON.stringify(domCompactObservation.summary, null, 2)}\n`,
-      "utf8"
+      domSummarySchema,
+      domCompactObservation.summary,
+      "DOM summary"
     );
 
     return {
@@ -127,7 +149,7 @@ export async function runSnapshot(options: SnapshotOptions): Promise<SnapshotRes
   } finally {
     await browser.close();
   }
-}
+} 
 
 export function createSnapshotMetadata(input: {
   options: SnapshotOptions;
@@ -138,13 +160,28 @@ export function createSnapshotMetadata(input: {
   userAgent?: string;
 }): SnapshotMetadata {
   return {
+    mode: "snapshot-metadata",
     url: input.options.url,
     finalUrl: input.finalUrl,
     title: input.title,
     timestamp: input.timestamp ?? new Date().toISOString(),
+    ...(input.options.variantId ? { variantId: input.options.variantId } : {}),
+    ...(input.options.suiteId ? { suiteId: input.options.suiteId } : {}),
     viewport: input.viewport,
     readySelector: input.options.readySelector,
+    snapshotRoot: input.options.snapshotRoot,
     timeoutMs: input.options.timeoutMs,
     userAgent: input.userAgent
   };
+}
+
+async function writeJsonFile<T>(
+  filePath: string,
+  schema: Parameters<typeof validateJsonOutput<T>>[0],
+  value: T,
+  label: string
+): Promise<void> {
+  const validated = validateJsonOutput(schema, value, label);
+
+  await writeFile(filePath, `${JSON.stringify(validated, null, 2)}\n`, "utf8");
 }

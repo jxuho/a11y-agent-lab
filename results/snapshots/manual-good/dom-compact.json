@@ -1,0 +1,623 @@
+{
+  "mode": "dom-compact",
+  "url": "http://localhost:4310/checkout?variant=good-a11y",
+  "finalUrl": "http://localhost:4310/checkout?variant=good-a11y",
+  "title": "A11y Agent Lab - Checkout Fixture",
+  "timestamp": "2026-06-19T18:54:45.661Z",
+  "root": "body",
+  "elements": [
+    {
+      "ref": "dom-1",
+      "tag": "body",
+      "dataTestId": "checkout-app",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 1235.48
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"checkout-app\"]"
+    },
+    {
+      "ref": "dom-2",
+      "tag": "header",
+      "dataTestId": "checkout-header",
+      "bbox": {
+        "x": 160,
+        "y": 32,
+        "width": 960,
+        "height": 70.39
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"checkout-header\"]"
+    },
+    {
+      "ref": "dom-3",
+      "tag": "h1",
+      "text": "Checkout",
+      "bbox": {
+        "x": 160,
+        "y": 32,
+        "width": 960,
+        "height": 38.39
+      },
+      "visible": true,
+      "interactive": false
+    },
+    {
+      "ref": "dom-4",
+      "tag": "p",
+      "text": "Fixture variant: good-a11y",
+      "dataTestId": "variant-note",
+      "bbox": {
+        "x": 160,
+        "y": 78.39,
+        "width": 631.14,
+        "height": 24
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"variant-note\"]"
+    },
+    {
+      "ref": "dom-5",
+      "tag": "#text",
+      "text": "Fixture variant: good-a11y",
+      "visible": true,
+      "interactive": false
+    },
+    {
+      "ref": "dom-6",
+      "tag": "main",
+      "dataTestId": "checkout-main",
+      "bbox": {
+        "x": 160,
+        "y": 126.39,
+        "width": 960,
+        "height": 1061.09
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"checkout-main\"]"
+    },
+    {
+      "ref": "dom-7",
+      "tag": "form",
+      "dataTestId": "checkout-form",
+      "bbox": {
+        "x": 160,
+        "y": 126.39,
+        "width": 960,
+        "height": 1061.09
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"checkout-form\"]"
+    },
+    {
+      "ref": "dom-8",
+      "tag": "h2",
+      "text": "Shipping details",
+      "bbox": {
+        "x": 185,
+        "y": 179.39,
+        "width": 910,
+        "height": 23.03
+      },
+      "visible": true,
+      "interactive": false
+    },
+    {
+      "ref": "dom-9",
+      "tag": "fieldset",
+      "disabled": false,
+      "dataTestId": "shipping-section",
+      "bbox": {
+        "x": 187,
+        "y": 222.42,
+        "width": 906,
+        "height": 370
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"shipping-section\"]"
+    },
+    {
+      "ref": "dom-10",
+      "tag": "legend",
+      "text": "Contact and address",
+      "bbox": {
+        "x": 187,
+        "y": 222.42,
+        "width": 185.98,
+        "height": 24
+      },
+      "visible": true,
+      "interactive": false
+    },
+    {
+      "ref": "dom-11",
+      "tag": "label",
+      "text": "Full name",
+      "dataTestId": "full-name-field",
+      "bbox": {
+        "x": 187,
+        "y": 246.42,
+        "width": 906,
+        "height": 76
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"full-name-field\"]"
+    },
+    {
+      "ref": "dom-12",
+      "tag": "input",
+      "label": "Full name",
+      "placeholder": "Jordan Lee",
+      "type": "text",
+      "name": "full-name",
+      "checked": false,
+      "disabled": false,
+      "dataTestId": "full-name",
+      "bbox": {
+        "x": 187,
+        "y": 276.42,
+        "width": 906,
+        "height": 46
+      },
+      "visible": true,
+      "interactive": true,
+      "selectorHint": "[data-test=\"full-name\"]"
+    },
+    {
+      "ref": "dom-13",
+      "tag": "label",
+      "text": "Email address",
+      "dataTestId": "email-field",
+      "bbox": {
+        "x": 187,
+        "y": 336.42,
+        "width": 906,
+        "height": 76
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"email-field\"]"
+    },
+    {
+      "ref": "dom-14",
+      "tag": "input",
+      "label": "Email address",
+      "placeholder": "jordan@example.com",
+      "type": "email",
+      "name": "email",
+      "checked": false,
+      "disabled": false,
+      "dataTestId": "email",
+      "bbox": {
+        "x": 187,
+        "y": 366.42,
+        "width": 906,
+        "height": 46
+      },
+      "visible": true,
+      "interactive": true,
+      "selectorHint": "[data-test=\"email\"]"
+    },
+    {
+      "ref": "dom-15",
+      "tag": "label",
+      "text": "Street address",
+      "dataTestId": "street-address-field",
+      "bbox": {
+        "x": 187,
+        "y": 426.42,
+        "width": 906,
+        "height": 76
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"street-address-field\"]"
+    },
+    {
+      "ref": "dom-16",
+      "tag": "input",
+      "label": "Street address",
+      "placeholder": "120 Research Way",
+      "type": "text",
+      "name": "street-address",
+      "checked": false,
+      "disabled": false,
+      "dataTestId": "street-address",
+      "bbox": {
+        "x": 187,
+        "y": 456.42,
+        "width": 906,
+        "height": 46
+      },
+      "visible": true,
+      "interactive": true,
+      "selectorHint": "[data-test=\"street-address\"]"
+    },
+    {
+      "ref": "dom-17",
+      "tag": "label",
+      "text": "City",
+      "dataTestId": "city-field",
+      "bbox": {
+        "x": 187,
+        "y": 516.42,
+        "width": 446,
+        "height": 76
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"city-field\"]"
+    },
+    {
+      "ref": "dom-18",
+      "tag": "input",
+      "label": "City",
+      "placeholder": "Portland",
+      "type": "text",
+      "name": "city",
+      "checked": false,
+      "disabled": false,
+      "dataTestId": "city",
+      "bbox": {
+        "x": 187,
+        "y": 546.42,
+        "width": 446,
+        "height": 46
+      },
+      "visible": true,
+      "interactive": true,
+      "selectorHint": "[data-test=\"city\"]"
+    },
+    {
+      "ref": "dom-19",
+      "tag": "label",
+      "text": "Postal code",
+      "dataTestId": "postal-code-field",
+      "bbox": {
+        "x": 647,
+        "y": 516.42,
+        "width": 446,
+        "height": 76
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"postal-code-field\"]"
+    },
+    {
+      "ref": "dom-20",
+      "tag": "input",
+      "label": "Postal code",
+      "placeholder": "97205",
+      "type": "text",
+      "name": "postal-code",
+      "checked": false,
+      "disabled": false,
+      "dataTestId": "postal-code",
+      "bbox": {
+        "x": 647,
+        "y": 546.42,
+        "width": 446,
+        "height": 46
+      },
+      "visible": true,
+      "interactive": true,
+      "selectorHint": "[data-test=\"postal-code\"]"
+    },
+    {
+      "ref": "dom-21",
+      "tag": "h2",
+      "text": "Payment",
+      "bbox": {
+        "x": 185,
+        "y": 640.42,
+        "width": 910,
+        "height": 23.03
+      },
+      "visible": true,
+      "interactive": false
+    },
+    {
+      "ref": "dom-22",
+      "tag": "fieldset",
+      "disabled": false,
+      "dataTestId": "payment-section",
+      "bbox": {
+        "x": 187,
+        "y": 683.45,
+        "width": 906,
+        "height": 190
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"payment-section\"]"
+    },
+    {
+      "ref": "dom-23",
+      "tag": "legend",
+      "text": "Card details",
+      "bbox": {
+        "x": 187,
+        "y": 683.45,
+        "width": 108.7,
+        "height": 24
+      },
+      "visible": true,
+      "interactive": false
+    },
+    {
+      "ref": "dom-24",
+      "tag": "label",
+      "text": "Card number",
+      "dataTestId": "card-number-field",
+      "bbox": {
+        "x": 187,
+        "y": 707.45,
+        "width": 906,
+        "height": 76
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"card-number-field\"]"
+    },
+    {
+      "ref": "dom-25",
+      "tag": "input",
+      "label": "Card number",
+      "placeholder": "4242 4242 4242 4242",
+      "type": "text",
+      "name": "card-number",
+      "checked": false,
+      "disabled": false,
+      "dataTestId": "card-number",
+      "bbox": {
+        "x": 187,
+        "y": 737.45,
+        "width": 906,
+        "height": 46
+      },
+      "visible": true,
+      "interactive": true,
+      "selectorHint": "[data-test=\"card-number\"]"
+    },
+    {
+      "ref": "dom-26",
+      "tag": "label",
+      "text": "Expiration date",
+      "dataTestId": "expiry-field",
+      "bbox": {
+        "x": 187,
+        "y": 797.45,
+        "width": 446,
+        "height": 76
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"expiry-field\"]"
+    },
+    {
+      "ref": "dom-27",
+      "tag": "input",
+      "label": "Expiration date",
+      "placeholder": "12/30",
+      "type": "text",
+      "name": "expiry",
+      "checked": false,
+      "disabled": false,
+      "dataTestId": "expiry",
+      "bbox": {
+        "x": 187,
+        "y": 827.45,
+        "width": 446,
+        "height": 46
+      },
+      "visible": true,
+      "interactive": true,
+      "selectorHint": "[data-test=\"expiry\"]"
+    },
+    {
+      "ref": "dom-28",
+      "tag": "label",
+      "text": "Security code",
+      "dataTestId": "security-code-field",
+      "bbox": {
+        "x": 647,
+        "y": 797.45,
+        "width": 446,
+        "height": 76
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"security-code-field\"]"
+    },
+    {
+      "ref": "dom-29",
+      "tag": "input",
+      "label": "Security code",
+      "placeholder": "123",
+      "type": "text",
+      "name": "security-code",
+      "checked": false,
+      "disabled": false,
+      "dataTestId": "security-code",
+      "bbox": {
+        "x": 647,
+        "y": 827.45,
+        "width": 446,
+        "height": 46
+      },
+      "visible": true,
+      "interactive": true,
+      "selectorHint": "[data-test=\"security-code\"]"
+    },
+    {
+      "ref": "dom-30",
+      "tag": "section",
+      "label": "Discount",
+      "ariaLabelledBy": "discount-heading",
+      "dataTestId": "discount-section",
+      "bbox": {
+        "x": 185,
+        "y": 893.45,
+        "width": 910,
+        "height": 161.03
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"discount-section\"]"
+    },
+    {
+      "ref": "dom-31",
+      "tag": "h2",
+      "text": "Discount",
+      "bbox": {
+        "x": 185,
+        "y": 921.45,
+        "width": 94.98,
+        "height": 23.03
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "#discount-heading"
+    },
+    {
+      "ref": "dom-32",
+      "tag": "label",
+      "text": "Discount code",
+      "bbox": {
+        "x": 289.98,
+        "y": 906.97,
+        "width": 127.55,
+        "height": 24
+      },
+      "visible": true,
+      "interactive": false
+    },
+    {
+      "ref": "dom-33",
+      "tag": "input",
+      "label": "Discount code",
+      "placeholder": "CODE",
+      "type": "text",
+      "name": "discount-code",
+      "checked": false,
+      "disabled": false,
+      "dataTestId": "discount-code",
+      "bbox": {
+        "x": 185,
+        "y": 954.48,
+        "width": 910,
+        "height": 46
+      },
+      "visible": true,
+      "interactive": true,
+      "selectorHint": "[data-test=\"discount-code\"]"
+    },
+    {
+      "ref": "dom-34",
+      "tag": "button",
+      "text": "Apply discount",
+      "type": "button",
+      "disabled": false,
+      "dataTestId": "apply-discount",
+      "bbox": {
+        "x": 185,
+        "y": 1010.48,
+        "width": 166.14,
+        "height": 44
+      },
+      "visible": true,
+      "interactive": true,
+      "selectorHint": "[data-test=\"apply-discount\"]"
+    },
+    {
+      "ref": "dom-35",
+      "tag": "label",
+      "text": "Save my details for next time",
+      "bbox": {
+        "x": 185,
+        "y": 1074.48,
+        "width": 910,
+        "height": 24
+      },
+      "visible": true,
+      "interactive": false
+    },
+    {
+      "ref": "dom-36",
+      "tag": "input",
+      "label": "Save my details for next time",
+      "type": "checkbox",
+      "name": "saveInfo",
+      "checked": false,
+      "disabled": false,
+      "dataTestId": "save-info",
+      "bbox": {
+        "x": 189,
+        "y": 1079.98,
+        "width": 13,
+        "height": 13
+      },
+      "visible": true,
+      "interactive": true,
+      "selectorHint": "[data-test=\"save-info\"]"
+    },
+    {
+      "ref": "dom-37",
+      "tag": "div",
+      "dataTestId": "checkout-actions",
+      "bbox": {
+        "x": 185,
+        "y": 1118.48,
+        "width": 910,
+        "height": 44
+      },
+      "visible": true,
+      "interactive": false,
+      "selectorHint": "[data-test=\"checkout-actions\"]"
+    },
+    {
+      "ref": "dom-38",
+      "tag": "button",
+      "text": "Place order",
+      "type": "submit",
+      "disabled": false,
+      "dataTestId": "place-order",
+      "bbox": {
+        "x": 185,
+        "y": 1118.48,
+        "width": 135,
+        "height": 44
+      },
+      "visible": true,
+      "interactive": true,
+      "selectorHint": "[data-test=\"place-order\"]"
+    },
+    {
+      "ref": "dom-39",
+      "tag": "button",
+      "text": "Back to cart",
+      "type": "button",
+      "disabled": false,
+      "dataTestId": "back-to-cart",
+      "bbox": {
+        "x": 332,
+        "y": 1118.48,
+        "width": 140.72,
+        "height": 44
+      },
+      "visible": true,
+      "interactive": true,
+      "selectorHint": "[data-test=\"back-to-cart\"]"
+    }
+  ]
+}

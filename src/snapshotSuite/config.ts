@@ -31,8 +31,25 @@ export const snapshotSuiteConfigSchema = z.object({
 export type SnapshotSuiteConfig = z.infer<typeof snapshotSuiteConfigSchema>;
 
 export async function loadSnapshotSuiteConfig(configPath: string): Promise<SnapshotSuiteConfig> {
-  const contents = await readFile(configPath, "utf8");
-  const parsedYaml = YAML.parse(contents);
+  let contents: string;
+  let parsedYaml: unknown;
+
+  try {
+    contents = await readFile(configPath, "utf8");
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+
+    throw new Error(`Unable to read snapshot suite config at ${configPath}: ${message}`);
+  }
+
+  try {
+    parsedYaml = YAML.parse(contents);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+
+    throw new Error(`Invalid YAML in snapshot suite config at ${configPath}: ${message}`);
+  }
+
   const result = snapshotSuiteConfigSchema.safeParse(parsedYaml);
 
   if (!result.success) {

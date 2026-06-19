@@ -1,0 +1,42 @@
+{
+  "mode": "aria-snapshot",
+  "url": "http://localhost:4310/checkout?variant=good-a11y",
+  "finalUrl": "http://localhost:4310/checkout?variant=good-a11y",
+  "title": "A11y Agent Lab - Checkout Fixture",
+  "timestamp": "2026-06-19T18:54:45.661Z",
+  "snapshotRoot": "body",
+  "stats": {
+    "charCount": 1267,
+    "lineCount": 42,
+    "nonEmptyLineCount": 42,
+    "approxTokenCount": 317,
+    "roleLineCount": 33,
+    "buttonLineCount": 3,
+    "textboxLineCount": 9,
+    "checkboxLineCount": 1,
+    "linkLineCount": 0,
+    "unnamedInteractiveLineCount": 0
+  },
+  "previewLines": [
+    "- banner:",
+    "- heading \"Checkout\" [level=1]",
+    "- paragraph: \"Fixture variant: good-a11y\"",
+    "- main:",
+    "- heading \"Shipping details\" [level=2]",
+    "- group \"Contact and address\":",
+    "- text: Contact and address Full name",
+    "- textbox \"Full name\":",
+    "- /placeholder: Jordan Lee",
+    "- text: Email address",
+    "- textbox \"Email address\":",
+    "- /placeholder: jordan@example.com",
+    "- text: Street address",
+    "- textbox \"Street address\":",
+    "- /placeholder: 120 Research Way",
+    "- text: City",
+    "- textbox \"City\":",
+    "- /placeholder: Portland",
+    "- text: Postal code",
+    "- textbox \"Postal code\":"
+  ]
+}

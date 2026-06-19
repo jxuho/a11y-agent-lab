@@ -27,8 +27,11 @@ export interface AriaSnapshotStats {
 export interface AriaSnapshotSummary {
   mode: typeof ariaSnapshotMode;
   url: string;
+  finalUrl?: string;
   title: string;
   timestamp: string;
+  variantId?: string;
+  suiteId?: string;
   snapshotRoot: string;
   stats: AriaSnapshotStats;
   previewLines: string[];
@@ -42,14 +45,19 @@ export interface AriaSnapshotObservation {
 export interface AriaSnapshotSummaryInput {
   snapshot: string;
   url: string;
+  finalUrl?: string;
   title: string;
   snapshotRoot: string;
   timestamp?: string;
+  variantId?: string;
+  suiteId?: string;
 }
 
 export interface ObserveAriaSnapshotOptions {
   snapshotRoot?: string;
   timestamp?: string;
+  variantId?: string;
+  suiteId?: string;
 }
 
 export async function observeAriaSnapshot(
@@ -64,9 +72,12 @@ export async function observeAriaSnapshot(
     summary: createAriaSnapshotSummary({
       snapshot,
       url: page.url(),
+      finalUrl: page.url(),
       title: await page.title(),
       snapshotRoot,
-      timestamp: options.timestamp
+      timestamp: options.timestamp,
+      variantId: options.variantId,
+      suiteId: options.suiteId
     })
   };
 }
@@ -75,8 +86,11 @@ export function createAriaSnapshotSummary(input: AriaSnapshotSummaryInput): Aria
   return {
     mode: ariaSnapshotMode,
     url: input.url,
+    ...(input.finalUrl ? { finalUrl: input.finalUrl } : {}),
     title: input.title,
     timestamp: input.timestamp ?? new Date().toISOString(),
+    ...(input.variantId ? { variantId: input.variantId } : {}),
+    ...(input.suiteId ? { suiteId: input.suiteId } : {}),
     snapshotRoot: input.snapshotRoot,
     stats: calculateAriaSnapshotStats(input.snapshot),
     previewLines: getPreviewLines(input.snapshot)

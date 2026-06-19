@@ -1,9 +1,17 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import { serializeError } from "../errors.js";
 import type { AriaSnapshotSummary } from "../observers/ariaSnapshot.js";
 import type { CdpAxSummary } from "../observers/cdpAx.js";
 import type { DomCompactSummary } from "../observers/domCompact.js";
+import {
+  ariaSummarySchema,
+  cdpAxSummarySchema,
+  domSummarySchema,
+  snapshotSuiteSummarySchema,
+  validateJsonOutput
+} from "../schemas/output.js";
 import { type SnapshotOptions } from "../snapshot/options.js";
 import { runSnapshot } from "../snapshot/runner.js";
 import {
@@ -15,6 +23,7 @@ import type { SnapshotSuiteOptions } from "./options.js";
 import {
   createSnapshotSuiteCsv,
   createSnapshotSuiteSummary,
+  errorToVariantFields,
   selectVariantStats,
   type SnapshotSuiteSummary,
   type SnapshotSuiteVariantResult
@@ -70,7 +79,9 @@ export async function runSnapshotSuiteFromConfig(input: {
         readySelector: input.config.readySelector,
         snapshotRoot: input.config.snapshotRoot,
         timeoutMs: input.timeoutMs,
-        headless: input.headless
+        headless: input.headless,
+        suiteId: input.config.id,
+        variantId: variant.id
       });
 
       variants.push({
@@ -81,12 +92,14 @@ export async function runSnapshotSuiteFromConfig(input: {
         stats: await readVariantStats(variantOutDir)
       });
     } catch (error: unknown) {
+      const serializedError = serializeError(error);
+
       variants.push({
         id: variant.id,
         url,
         outDir: variantOutDir,
         status: "failed",
-        errorMessage: error instanceof Error ? error.message : String(error)
+        ...errorToVariantFields(serializedError)
       });
     }
   }
@@ -100,7 +113,13 @@ export async function runSnapshotSuiteFromConfig(input: {
   const summaryPath = path.join(suiteOutDir, "summary.json");
   const csvPath = path.join(suiteOutDir, "results.csv");
 
-  await writeFile(summaryPath, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
+  const validatedSummary = validateJsonOutput(
+    snapshotSuiteSummarySchema,
+    summary,
+    "snapshot suite summary"
+  );
+
+  await writeFile(summaryPath, `${JSON.stringify(validatedSummary, null, 2)}\n`, "utf8");
   await writeFile(csvPath, createSnapshotSuiteCsv(summary), "utf8");
 
   return {
@@ -112,14 +131,24 @@ export async function runSnapshotSuiteFromConfig(input: {
 
 async function readVariantStats(outDir: string) {
   const [cdpAx, aria, dom] = await Promise.all([
-    readJson<CdpAxSummary>(path.join(outDir, "cdp-ax-summary.json")),
-    readJson<AriaSnapshotSummary>(path.join(outDir, "aria-summary.json")),
-    readJson<DomCompactSummary>(path.join(outDir, "dom-summary.json"))
+    readJson(path.join(outDir, "cdp-ax-summary.json"), cdpAxSummarySchema, "CDP AX summary"),
+    readJson(path.join(outDir, "aria-summary.json"), ariaSummarySchema, "ARIA summary"),
+    readJson(path.join(outDir, "dom-summary.json"), domSummarySchema, "DOM summary")
   ]);
 
-  return selectVariantStats({ cdpAx, aria, dom });
+  return selectVariantStats({
+    cdpAx: cdpAx as CdpAxSummary,
+    aria: aria as AriaSnapshotSummary,
+    dom: dom as DomCompactSummary
+  });
 }
 
-async function readJson<T>(filePath: string): Promise<T> {
-  return JSON.parse(await readFile(filePath, "utf8")) as T;
+async function readJson<T>(
+  filePath: string,
+  schema: Parameters<typeof validateJsonOutput<T>>[0],
+  label: string
+): Promise<T> {
+  const parsed = JSON.parse(await readFile(filePath, "utf8")) as T;
+
+  return validateJsonOutput(schema, parsed, label);
 }

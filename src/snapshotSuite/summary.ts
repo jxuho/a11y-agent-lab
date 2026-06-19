@@ -1,6 +1,7 @@
 import type { AriaSnapshotSummary } from "../observers/ariaSnapshot.js";
 import type { CdpAxSummary } from "../observers/cdpAx.js";
 import type { DomCompactSummary } from "../observers/domCompact.js";
+import type { SerializedError } from "../errors.js";
 
 export interface SnapshotSuiteVariantStats {
   cdpAx?: {
@@ -32,7 +33,9 @@ export interface SnapshotSuiteVariantResult {
   outDir: string;
   status: "success" | "failed";
   stats?: SnapshotSuiteVariantStats;
+  errorName?: string;
   errorMessage?: string;
+  errorStack?: string;
 }
 
 export interface SnapshotSuiteSummary {
@@ -128,6 +131,7 @@ const csvColumns = [
   "dom_hidden_element_count",
   "dom_char_count",
   "dom_approx_token_count",
+  "error_name",
   "error_message"
 ];
 
@@ -153,6 +157,7 @@ export function createSnapshotSuiteCsv(summary: SnapshotSuiteSummary): string {
       variant.stats?.dom?.hiddenElementCount,
       variant.stats?.dom?.charCount,
       variant.stats?.dom?.approxTokenCount,
+      variant.errorName,
       variant.errorMessage
     ]
       .map(csvCell)
@@ -160,6 +165,17 @@ export function createSnapshotSuiteCsv(summary: SnapshotSuiteSummary): string {
   );
 
   return `${csvColumns.join(",")}\n${rows.join("\n")}\n`;
+}
+
+export function errorToVariantFields(error: SerializedError): Pick<
+  SnapshotSuiteVariantResult,
+  "errorName" | "errorMessage" | "errorStack"
+> {
+  return {
+    errorName: error.errorName,
+    errorMessage: error.errorMessage,
+    errorStack: error.errorStack
+  };
 }
 
 function csvCell(value: unknown): string {

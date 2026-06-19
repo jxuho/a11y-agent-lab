@@ -78,8 +78,11 @@ export interface CdpAxSummaryStats {
 export interface CdpAxSummary {
   mode: typeof cdpAxMode;
   url: string;
+  finalUrl?: string;
   title: string;
   timestamp: string;
+  variantId?: string;
+  suiteId?: string;
   stats: CdpAxSummaryStats;
   nodes: CdpAxSummaryNode[];
 }
@@ -91,13 +94,18 @@ export interface CdpAxObservation {
 
 export interface ObserveCdpAccessibilityOptions {
   timestamp?: string;
+  variantId?: string;
+  suiteId?: string;
 }
 
 export interface CdpAxSummaryInput {
   tree: CdpAxTree;
   url: string;
+  finalUrl?: string;
   title: string;
   timestamp?: string;
+  variantId?: string;
+  suiteId?: string;
 }
 
 export async function observeCdpAccessibility(
@@ -116,8 +124,11 @@ export async function observeCdpAccessibility(
       summary: createCdpAxSummary({
         tree: rawTree,
         url: page.url(),
+        finalUrl: page.url(),
         title: await page.title(),
-        timestamp: options.timestamp
+        timestamp: options.timestamp,
+        variantId: options.variantId,
+        suiteId: options.suiteId
       })
     };
   } finally {
@@ -131,8 +142,11 @@ export function createCdpAxSummary(input: CdpAxSummaryInput): CdpAxSummary {
   return {
     mode: cdpAxMode,
     url: input.url,
+    ...(input.finalUrl ? { finalUrl: input.finalUrl } : {}),
     title: input.title,
     timestamp: input.timestamp ?? new Date().toISOString(),
+    ...(input.variantId ? { variantId: input.variantId } : {}),
+    ...(input.suiteId ? { suiteId: input.suiteId } : {}),
     stats: calculateCdpAxStats(nodes),
     nodes
   };
