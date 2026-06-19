@@ -4,7 +4,7 @@
 
 The core research question is how different web observation modes, such as Chrome DevTools Protocol accessibility trees, Playwright ARIA snapshots, and compact DOM serialization, affect an AI agent's success rate, step count, token usage, latency, and invalid-action rate.
 
-This repository currently contains v0.1 Snapshot Lab: a deterministic checkout fixture app, single-page snapshots, CDP AX output, Playwright ARIA snapshots, compact DOM serialization, and a snapshot suite runner. v0.2 foundation work has started with a constrained action schema and ref-based action executor. It intentionally does not implement LLM calls, a full agent loop, evaluators, agent experiment runners, or report viewers yet.
+This repository currently contains v0.1 Snapshot Lab: a deterministic checkout fixture app, single-page snapshots, CDP AX output, Playwright ARIA snapshots, compact DOM serialization, and a snapshot suite runner. v0.2 foundation work has started with a constrained action schema, ref-based action executor, model adapter interface, deterministic mock adapter, prompt builder, and strict JSON action response parser. It intentionally does not implement real LLM calls, a full agent loop, evaluators, agent experiment runners, or report viewers yet.
 
 ## Current Scope
 
@@ -17,6 +17,7 @@ This repository currently contains v0.1 Snapshot Lab: a deterministic checkout f
 - Playwright snapshot command with screenshot, metadata, CDP AX output, ARIA snapshot output, and compact DOM output
 - YAML-based `snapshot-suite` command with suite `summary.json` and `results.csv`
 - v0.2 action schema foundation with zod validation and ref-based execution targets
+- v0.2 model/prompt foundation with provider-independent adapter interfaces and strict action response parsing
 
 ## Commands
 
@@ -190,7 +191,7 @@ node -e "const s=require('./results/snapshots/checkout/summary.json'); console.l
 sed -n '1,6p' results/snapshots/checkout/results.csv
 ```
 
-## v0.2 Action Foundation
+## v0.2 Agent Foundations
 
 The first v0.2 module defines a constrained JSON action schema and a ref-based executor. Agents are allowed to request only these action shapes:
 
@@ -206,6 +207,10 @@ type AgentAction =
 ```
 
 The executor consumes validated actions plus a `RefRegistry`. DOM compact observations can be converted into a registry using their stable `dom-*` refs and internal `selectorHint` values. Raw selectors are not part of the action schema, and arbitrary Playwright code or JavaScript execution is not accepted.
+
+The next v0.2 foundation module adds provider-independent model adapters, a deterministic `MockModelAdapter`, a not-configured real-model placeholder, a deterministic prompt builder, and a strict response parser. The prompt builder produces `systemPrompt` and `userPrompt` strings from the task, current URL, observation mode, observation content, and optional previous step summaries. The parser accepts only one full JSON object and validates it against the action schema above; markdown, prose-wrapped JSON, arrays, unsupported actions, malformed JSON, and multiple JSON objects fail clearly.
+
+These pieces are intended for the future `run` command's observe -> prompt -> model -> parse -> execute loop, but that loop is not implemented yet.
 
 ## Roadmap
 
