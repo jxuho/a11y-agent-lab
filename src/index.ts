@@ -65,3 +65,28 @@ export {
   type BuiltPrompt,
   type PreviousStepSummary
 } from "./prompts/builder.js";
+
+export {
+  evaluatorAssertionSchema,
+  evaluatorConfigSchema,
+  inputValueAssertionSchema,
+  jsAssertionSchema,
+  textAssertionSchema,
+  urlAssertionSchema,
+  type EvaluatorAssertion,
+  type EvaluatorConfig,
+  type InputValueEvaluatorAssertion,
+  type JsEvaluatorAssertion,
+  type TextEvaluatorAssertion,
+  type UrlEvaluatorAssertion
+} from "./evaluators/schema.js";
+
+export {
+  type AssertionResult,
+  type EvaluationContext,
+  type EvaluationOptions,
+  type EvaluationResult,
+  type Evaluator
+} from "./evaluators/types.js";
+
+export { DomPageStateEvaluator } from "./evaluators/dom.js";

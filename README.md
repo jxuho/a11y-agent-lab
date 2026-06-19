@@ -4,7 +4,7 @@
 
 The core research question is how different web observation modes, such as Chrome DevTools Protocol accessibility trees, Playwright ARIA snapshots, and compact DOM serialization, affect an AI agent's success rate, step count, token usage, latency, and invalid-action rate.
 
-This repository currently contains v0.1 Snapshot Lab: a deterministic checkout fixture app, single-page snapshots, CDP AX output, Playwright ARIA snapshots, compact DOM serialization, and a snapshot suite runner. v0.2 foundation work has started with a constrained action schema, ref-based action executor, model adapter interface, deterministic mock adapter, prompt builder, and strict JSON action response parser. It intentionally does not implement real LLM calls, a full agent loop, evaluators, agent experiment runners, or report viewers yet.
+This repository currently contains v0.1 Snapshot Lab: a deterministic checkout fixture app, single-page snapshots, CDP AX output, Playwright ARIA snapshots, compact DOM serialization, and a snapshot suite runner. v0.2 foundation work has started with a constrained action schema, ref-based action executor, model adapter interface, deterministic mock adapter, prompt builder, strict JSON action response parser, and DOM/page-state evaluator. It intentionally does not implement real LLM calls, a full agent loop, agent experiment runners, or report viewers yet.
 
 ## Current Scope
 
@@ -18,6 +18,7 @@ This repository currently contains v0.1 Snapshot Lab: a deterministic checkout f
 - YAML-based `snapshot-suite` command with suite `summary.json` and `results.csv`
 - v0.2 action schema foundation with zod validation and ref-based execution targets
 - v0.2 model/prompt foundation with provider-independent adapter interfaces and strict action response parsing
+- v0.2 evaluator foundation with zod config schemas and structured page-state assertion results
 
 ## Commands
 
@@ -211,6 +212,10 @@ The executor consumes validated actions plus a `RefRegistry`. DOM compact observ
 The next v0.2 foundation module adds provider-independent model adapters, a deterministic `MockModelAdapter`, a not-configured real-model placeholder, a deterministic prompt builder, and a strict response parser. The prompt builder produces `systemPrompt` and `userPrompt` strings from the task, current URL, observation mode, observation content, and optional previous step summaries. The parser accepts only one full JSON object and validates it against the action schema above; markdown, prose-wrapped JSON, arrays, unsupported actions, malformed JSON, and multiple JSON objects fail clearly.
 
 These pieces are intended for the future `run` command's observe -> prompt -> model -> parse -> execute loop, but that loop is not implemented yet.
+
+The evaluator foundation adds a `DomPageStateEvaluator` that checks browser state after actions execute. It supports configured assertions for page text, input values, URL conditions, and minimal trusted JS expressions. Evaluation results include overall `success`, `elapsedMs`, and one structured result per assertion. Missing selectors and assertion errors become failed assertion results instead of crashing the whole evaluation.
+
+JS assertions are for trusted local experiment configs only. They must never come from model output, prompt output, action output, or untrusted runtime sources. Runtime evaluation defaults to `allowJsAssertions: false`; callers must explicitly enable it when they are loading trusted local configs.
 
 ## Roadmap
 
